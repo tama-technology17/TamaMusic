@@ -3,1878 +3,860 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#070709">
-<title>Rose Music Player</title>
-
+<title>Music Player</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
-:root {
-    --bg: #070709;
-    --panel: rgba(255,255,255,.045);
-    --panel-strong: rgba(255,255,255,.075);
-    --border: rgba(255,255,255,.08);
-    --text: #fff;
-    --muted: rgba(255,255,255,.48);
-    --accent: #ff4f87;
-    --accent-light: #ff91b0;
-    --shadow: 0 30px 80px rgba(0,0,0,.5);
-}
+  :root{
+    --bg:#070709;
+    --accent:#ff4f87;
+    --accent-soft:#ff91b0;
+    --glass:rgba(255,255,255,.04);
+    --glass-strong:rgba(255,255,255,.06);
+    --glass-border:rgba(255,255,255,.08);
+    --text-bright:rgba(255,255,255,1);
+    --text-dim:rgba(255,255,255,.4);
+    --text-dimmer:rgba(255,255,255,.15);
+    --radius-lg:28px;
+    --radius-md:18px;
+    --radius-sm:12px;
+  }
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-    margin: 0;
-    width: 100%;
-    min-height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: Inter, system-ui, sans-serif;
-}
-
-body {
-    overflow-x: hidden;
-}
-
-button,
-input {
-    font: inherit;
-}
-
-button {
-    border: 0;
-    cursor: pointer;
-}
-
-.app {
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-    padding: 24px;
-}
-
-.background {
-    position: fixed;
-    inset: -20%;
-    z-index: 0;
-    pointer-events: none;
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
     background:
-        radial-gradient(circle at 25% 15%, rgba(255,79,135,.13), transparent 30%),
-        radial-gradient(circle at 80% 80%, rgba(255,145,176,.08), transparent 30%),
-        #070709;
-    filter: blur(35px);
-}
+      radial-gradient(circle at 15% 0%, rgba(255,79,135,.10), transparent 55%),
+      radial-gradient(circle at 85% 100%, rgba(255,145,176,.07), transparent 50%),
+      var(--bg);
+    color:var(--text-bright);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
 
-.player {
-    position: relative;
-    z-index: 1;
-    width: min(1250px, 100%);
-    min-height: calc(100vh - 48px);
-    margin: auto;
-    display: grid;
-    grid-template-columns: 380px minmax(0, 1fr);
-    gap: 22px;
-}
+  button{font-family:inherit;}
+  ::selection{background:rgba(255,79,135,.35);}
 
-.player-card,
-.lyrics-card {
-    background: rgba(255,255,255,.035);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-radius: 30px;
-}
+  :focus-visible{
+    outline:2px solid var(--accent-soft);
+    outline-offset:3px;
+    border-radius:8px;
+  }
 
-.player-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 34px;
-}
+  /* ---------- Layout ---------- */
+  .app{
+    max-width:1180px;
+    margin:0 auto;
+    height:100vh;
+    height:100dvh;
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:20px;
+    padding:28px;
+  }
 
-.cover-wrapper {
-    position: relative;
-    width: min(100%, 310px);
-    aspect-ratio: 1;
-    margin: 0 auto 30px;
-}
-
-.cover-glow {
-    position: absolute;
-    inset: 12%;
-    background: var(--accent);
-    opacity: .18;
-    filter: blur(55px);
-    border-radius: 50%;
-    transition: opacity .5s ease, transform .5s ease;
-}
-
-.cover {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 25px;
-    display: block;
-    box-shadow: 0 25px 55px rgba(0,0,0,.55);
-    transition:
-        transform .6s cubic-bezier(.2,.8,.2,1),
-        box-shadow .6s ease;
-}
-
-.cover.playing {
-    transform: scale(1.025);
-    animation: floating 4s ease-in-out infinite;
-}
-
-.cover.playing + .cover-glow {
-    opacity: .3;
-    transform: scale(1.08);
-}
-
-@keyframes floating {
-    0%, 100% {
-        transform: scale(1.025) translateY(0);
+  @media (max-width:960px){
+    .app{
+      grid-template-columns:1fr;
+      grid-template-rows:auto 1fr;
+      padding:14px;
+      gap:14px;
     }
-    50% {
-        transform: scale(1.04) translateY(-5px);
+  }
+
+  /* ---------- Glass panel base ---------- */
+  .player, .lyrics-panel{
+    background:linear-gradient(165deg, var(--glass-strong), rgba(255,255,255,.015));
+    border:1px solid var(--glass-border);
+    border-radius:var(--radius-lg);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+    box-shadow:0 30px 60px -25px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.06);
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* ---------- Player panel ---------- */
+  .player{
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+    min-height:0;
+  }
+
+  @media (max-width:960px){
+    .player{
+      padding:18px;
+      flex-direction:row;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
     }
-}
+  }
 
-.song-info {
-    text-align: center;
-    margin-bottom: 24px;
-}
+  .cover-wrap{
+    position:relative;
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:var(--radius-md);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(145deg,#17141a,#0c0b0e);
+  }
+  .cover-wrap::after{
+    content:'\266A';
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:44px;
+    color:var(--text-dim);
+  }
 
-.song-title {
-    margin: 0;
-    font-size: clamp(22px, 4vw, 29px);
-    font-weight: 800;
-    letter-spacing: -.7px;
-}
+  @media (max-width:960px){
+    .cover-wrap{width:78px;height:78px;flex:0 0 auto;}
+  }
 
-.song-artist {
-    margin: 8px 0 0;
-    color: var(--muted);
-    font-size: 14px;
-}
+  .cover{
+    position:relative;
+    z-index:1;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:var(--radius-md);
+    display:block;
+    box-shadow:0 20px 45px -18px rgba(0,0,0,.7);
+    transition:transform .6s cubic-bezier(.22,1,.36,1), box-shadow .6s ease, opacity .3s ease;
+  }
 
-.song-album {
-    margin: 5px 0 0;
-    color: rgba(255,255,255,.28);
-    font-size: 12px;
-}
+  .cover.cover--fallback{opacity:0;}
 
-.progress-area {
-    margin-top: 5px;
-}
+  .cover.is-playing{
+    animation:floaty 6s ease-in-out infinite;
+    box-shadow:0 0 70px -12px rgba(255,79,135,.5);
+  }
 
-.progress {
-    width: 100%;
-    height: 5px;
-    appearance: none;
-    -webkit-appearance: none;
-    border-radius: 99px;
-    outline: none;
-    cursor: pointer;
-    background: rgba(255,255,255,.1);
-}
+  @keyframes floaty{
+    0%,100%{transform:translateY(0) scale(1.02);}
+    50%{transform:translateY(-7px) scale(1.035);}
+  }
 
-.progress::-webkit-slider-runnable-track {
-    height: 5px;
-    border-radius: 99px;
-    background:
-        linear-gradient(
-            to right,
-            var(--accent) 0%,
-            var(--accent) var(--progress, 0%),
-            rgba(255,255,255,.1) var(--progress, 0%),
-            rgba(255,255,255,.1) 100%
-        );
-}
+  .track-info{min-width:0;}
+  .track-title{
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 4px;
+    letter-spacing:-.01em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .track-artist{
+    margin:0 0 2px;
+    font-size:14px;
+    font-weight:500;
+    color:var(--text-dim);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .track-album{
+    margin:0;
+    font-size:12px;
+    color:var(--text-dimmer);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
 
-.progress::-moz-range-track {
-    height: 5px;
-    border-radius: 99px;
-    background: rgba(255,255,255,.1);
-}
-
-.progress::-moz-range-progress {
-    height: 5px;
-    background: var(--accent);
-    border-radius: 99px;
-}
-
-.progress::-webkit-slider-thumb {
-    appearance: none;
-    width: 13px;
-    height: 13px;
-    margin-top: -4px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 0 12px rgba(255,79,135,.7);
-    opacity: 0;
-    transition: opacity .2s ease, transform .2s ease;
-}
-
-.progress:hover::-webkit-slider-thumb,
-.progress:active::-webkit-slider-thumb {
-    opacity: 1;
-}
-
-.time-row {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 9px;
-    color: rgba(255,255,255,.38);
-    font-size: 11px;
-}
-
-.controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 27px;
-}
-
-.control {
-    width: 43px;
-    height: 43px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    color: rgba(255,255,255,.7);
-    background: rgba(255,255,255,.055);
-    border: 1px solid rgba(255,255,255,.06);
-    transition: transform .2s ease, background .2s ease, color .2s ease;
-}
-
-.control:hover {
-    transform: translateY(-2px);
-    color: #fff;
-    background: rgba(255,255,255,.1);
-}
-
-.control:active {
-    transform: scale(.94);
-}
-
-.play-button {
-    width: 62px;
-    height: 62px;
-    color: #fff;
-    background: var(--accent);
-    box-shadow: 0 10px 30px rgba(255,79,135,.25);
-}
-
-.play-button:hover {
-    background: var(--accent-light);
-}
-
-.icon {
-    width: 19px;
-    height: 19px;
-    fill: currentColor;
-}
-
-.play-button .icon {
-    width: 23px;
-    height: 23px;
-}
-
-.volume-row {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    margin-top: 24px;
-    color: rgba(255,255,255,.55);
-}
-
-.volume {
-    flex: 1;
-    height: 4px;
-    appearance: none;
-    -webkit-appearance: none;
-    border-radius: 99px;
-    background: rgba(255,255,255,.1);
-}
-
-.volume::-webkit-slider-runnable-track {
-    height: 4px;
-    border-radius: 99px;
-    background:
-        linear-gradient(
-            to right,
-            var(--accent-light) 0%,
-            var(--accent-light) var(--volume, 80%),
-            rgba(255,255,255,.1) var(--volume, 80%),
-            rgba(255,255,255,.1) 100%
-        );
-}
-
-.volume::-webkit-slider-thumb {
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    margin-top: -4px;
-    border-radius: 50%;
-    background: #fff;
-}
-
-.status {
-    text-align: center;
-    margin-top: 20px;
-    color: rgba(255,255,255,.22);
-    font-size: 10px;
-}
-
-.lyrics-card {
-    min-height: 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.lyrics-header {
-    position: absolute;
-    z-index: 5;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 25px 30px 18px;
-    background: linear-gradient(
-        to bottom,
-        rgba(7,7,9,.95),
-        rgba(7,7,9,.5),
-        transparent
-    );
-    pointer-events: none;
-}
-
-.lyrics-label {
-    color: rgba(255,255,255,.3);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-.lyrics-section {
-    position: relative;
-    height: 100%;
-    min-height: 650px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-    padding: 145px 30px 170px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.12) transparent;
-    overscroll-behavior: contain;
-}
-
-.lyrics-section::-webkit-scrollbar {
-    width: 5px;
-}
-
-.lyrics-section::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.lyrics-section::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,.12);
-    border-radius: 20px;
-}
-
-/* Fade mask */
-.lyrics-card::before,
-.lyrics-card::after {
-    content: "";
-    position: absolute;
-    z-index: 4;
-    left: 0;
-    right: 0;
-    height: 125px;
-    pointer-events: none;
-}
-
-.lyrics-card::before {
-    top: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(7,7,9,1),
-        rgba(7,7,9,.72),
-        transparent
-    );
-}
-
-.lyrics-card::after {
-    bottom: 0;
-    background: linear-gradient(
-        to top,
-        rgba(7,7,9,1),
-        rgba(7,7,9,.72),
-        transparent
-    );
-}
-
-.line {
-    position: relative;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 10px 16px;
-    border-radius: 15px;
-    color: rgba(255,255,255,.4);
-    opacity: .55;
-    font-size: clamp(17px, 2vw, 22px);
-    font-weight: 600;
-    line-height: 1.55;
-    letter-spacing: -.35px;
-    text-align: center;
-    transform: scale(.98);
-    transition:
-        opacity .45s ease,
-        color .45s ease,
-        transform .45s cubic-bezier(.2,.8,.2,1),
-        background .35s ease,
-        filter .45s ease;
-    cursor: pointer;
-}
-
-.line:hover {
-    transform: scale(1.025) translateX(4px);
-    background: rgba(255,255,255,.035);
-    color: rgba(255,255,255,.72);
-    opacity: .85;
-}
-
-.line.past {
-    opacity: .25;
-    color: rgba(255,255,255,.15);
-    transform: scale(.94);
-    filter: blur(.05px);
-}
-
-.line.future {
-    opacity: .55;
-    color: rgba(255,255,255,.4);
-}
-
-.line.active {
-    opacity: 1;
-    color: #fff;
-    transform: scale(1.05);
-    background: rgba(255,255,255,.045);
-    box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.035),
-        0 12px 35px rgba(0,0,0,.15);
-}
-
-.line.active::before {
-    content: "";
-    position: absolute;
-    left: 4px;
-    top: 50%;
-    width: 2px;
-    height: 25px;
-    border-radius: 99px;
-    background: var(--accent);
-    box-shadow: 0 0 12px rgba(255,79,135,.5);
-    transform: translateY(-50%);
-}
-
-.line.active:hover {
-    transform: scale(1.065) translateX(4px);
-    background: rgba(255,255,255,.065);
-}
-
-.word {
-    display: inline-block;
-    margin-right: .28em;
-    color: rgba(255,255,255,.32);
-    transition:
-        color .14s ease,
-        text-shadow .14s ease,
-        transform .14s cubic-bezier(.2,.8,.2,1),
-        opacity .14s ease;
-}
-
-.word.sung {
-    color: rgba(255,255,255,.92);
-}
-
-.word.active {
-    color: var(--accent-light);
-    transform: translateY(-1px) scale(1.035);
-    text-shadow:
-        0 0 8px rgba(255,79,135,.35),
-        0 0 20px rgba(255,79,135,.15);
-}
-
-.empty {
-    height: 100%;
-    min-height: 400px;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    color: rgba(255,255,255,.25);
-}
-
-.empty strong {
-    display: block;
-    color: rgba(255,255,255,.55);
-    font-size: 15px;
-    margin-bottom: 7px;
-}
-
-.empty span {
-    font-size: 12px;
-}
-
-@media (max-width: 850px) {
-    .app {
-        padding: 12px;
+  @media (max-width:960px){
+    .track-info{flex:1 1 auto;}
+    .progress-wrap, .controls-row, .volume-row{
+      order:5;
+      flex-basis:100%;
     }
+  }
 
-    .player {
-        min-height: calc(100vh - 24px);
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
+  /* ---------- Range inputs (progress + volume) ---------- */
+  input[type=range]{
+    -webkit-appearance:none;
+    appearance:none;
+    width:100%;
+    height:4px;
+    border-radius:4px;
+    background:rgba(255,255,255,.12);
+    cursor:pointer;
+    outline-offset:6px;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:13px;height:13px;
+    border-radius:50%;
+    background:#fff;
+    border:2px solid var(--accent);
+    box-shadow:0 0 10px rgba(255,79,135,.65);
+    margin-top:-4.5px;
+    transition:transform .15s ease;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:13px;height:13px;
+    border-radius:50%;
+    background:#fff;
+    border:2px solid var(--accent);
+    box-shadow:0 0 10px rgba(255,79,135,.65);
+    transition:transform .15s ease;
+  }
+  input[type=range]::-moz-range-track{background:transparent;height:4px;border:none;}
+  input[type=range]:active::-webkit-slider-thumb{transform:scale(1.25);}
+  input[type=range]:active::-moz-range-thumb{transform:scale(1.25);}
 
-    .player-card {
-        padding: 25px 20px 20px;
-        border-radius: 24px;
-    }
+  .progress-wrap{display:flex;flex-direction:column;gap:8px;}
+  .time-row{
+    display:flex;justify-content:space-between;
+    font-size:11px;color:var(--text-dim);
+    font-variant-numeric:tabular-nums;
+  }
 
-    .cover-wrapper {
-        width: min(65vw, 270px);
-        margin-bottom: 22px;
-    }
+  .controls-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+  }
 
-    .song-info {
-        margin-bottom: 18px;
-    }
+  .ctrl-btn{
+    background:none;border:none;color:var(--text-bright);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    padding:8px;border-radius:50%;
+    transition:transform .18s ease, background .2s ease;
+    opacity:.85;
+  }
+  .ctrl-btn:hover{opacity:1;transform:scale(1.08);background:rgba(255,255,255,.06);}
+  .ctrl-btn svg{width:20px;height:20px;}
 
-    .controls {
-        margin-top: 22px;
-    }
+  .ctrl-btn--main{
+    width:54px;height:54px;
+    background:linear-gradient(155deg,var(--accent),#ff2f6f);
+    box-shadow:0 8px 24px -6px rgba(255,79,135,.65);
+    opacity:1;
+  }
+  .ctrl-btn--main svg{width:22px;height:22px;}
+  .ctrl-btn--main:hover{transform:scale(1.06);background:linear-gradient(155deg,var(--accent-soft),var(--accent));}
+  .ctrl-btn--main .icon-pause{display:none;}
+  .ctrl-btn--main.is-playing .icon-play{display:none;}
+  .ctrl-btn--main.is-playing .icon-pause{display:flex;}
 
-    .volume-row {
-        margin-top: 18px;
-    }
+  .volume-row{display:flex;align-items:center;gap:10px;}
+  .icon-btn{
+    background:none;border:none;color:var(--text-dim);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    padding:4px;transition:color .2s ease;
+    flex:0 0 auto;
+  }
+  .icon-btn:hover{color:var(--text-bright);}
+  .icon-btn svg{width:17px;height:17px;}
+  .icon-btn .icon-muted{display:none;}
+  .icon-btn.is-muted .icon-vol{display:none;}
+  .icon-btn.is-muted .icon-muted{display:flex;}
 
-    .lyrics-card {
-        min-height: 60vh;
-        height: 60vh;
-        border-radius: 24px;
-    }
+  .audio-error, .lyrics-error{
+    font-size:13px;
+    color:var(--accent-soft);
+    background:rgba(255,79,135,.08);
+    border:1px solid rgba(255,79,135,.2);
+    padding:10px 14px;
+    border-radius:var(--radius-sm);
+    text-align:center;
+  }
 
-    .lyrics-section {
-        min-height: 0;
-        padding: 120px 14px 130px;
-    }
+  /* ---------- Lyrics panel ---------- */
+  .lyrics-panel{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+  }
 
-    .lyrics-header {
-        padding: 20px 20px 15px;
-    }
+  .lyrics-scroll{
+    flex:1;
+    overflow-y:auto;
+    scroll-behavior:smooth;
+    padding:80px 30px;
+    scrollbar-width:none;
+  }
+  .lyrics-scroll::-webkit-scrollbar{display:none;}
 
-    .line {
-        padding: 9px 13px;
-        font-size: 17px;
-    }
+  .lyrics-fade{
+    position:absolute;
+    left:0;right:0;
+    height:90px;
+    pointer-events:none;
+    z-index:2;
+  }
+  .lyrics-fade--top{
+    top:0;
+    background:linear-gradient(180deg, rgba(9,8,11,.92) 0%, rgba(9,8,11,0) 100%);
+  }
+  .lyrics-fade--bottom{
+    bottom:0;
+    background:linear-gradient(0deg, rgba(9,8,11,.92) 0%, rgba(9,8,11,0) 100%);
+  }
 
-    .line.active {
-        transform: scale(1.025);
-    }
+  .line{
+    padding:10px 16px;
+    margin:2px 0;
+    border-radius:16px;
+    cursor:pointer;
+    position:relative;
+    transform-origin:left center;
+    transition:transform .45s cubic-bezier(.22,1,.36,1), opacity .45s ease, background .3s ease;
+  }
+  .line.past{opacity:.25;transform:scale(.94);}
+  .line.upcoming{opacity:.55;transform:scale(.98);}
+  .line.active{
+    opacity:1;
+    transform:scale(1.05);
+    background:rgba(255,255,255,.035);
+    padding:14px 20px;
+  }
+  .line.active::before{
+    content:'';
+    position:absolute;
+    left:-2px;top:50%;
+    transform:translateY(-50%);
+    width:3px;height:60%;
+    border-radius:4px;
+    background:linear-gradient(180deg,var(--accent),var(--accent-soft));
+    box-shadow:0 0 12px rgba(255,79,135,.6);
+  }
+  .line:hover{
+    transform:scale(1.025) translateX(4px);
+    background:rgba(255,255,255,.035);
+  }
+  .line.active:hover{
+    transform:scale(1.07) translateX(4px);
+  }
 
-    .line.active:hover {
-        transform: scale(1.04);
-    }
-}
+  .word{
+    display:inline-block;
+    font-weight:600;
+    font-size:16px;
+    line-height:1.5;
+    color:rgba(255,255,255,.4);
+    margin-right:.3em;
+    transition:color .25s ease, text-shadow .25s ease, transform .2s ease, font-size .35s cubic-bezier(.22,1,.36,1);
+  }
+  .line.upcoming .word{color:rgba(255,255,255,.4);}
+  .line.past .word{color:rgba(255,255,255,.7);}
+  .line.active .word{font-size:26px;color:rgba(255,255,255,.35);}
 
-@media (max-width: 450px) {
-    .cover-wrapper {
-        width: 57vw;
-        max-width: 230px;
-    }
+  /* Higher-specificity word states must win over the .line.active .word rule above,
+     otherwise the per-word karaoke color gets silently overridden by the line state. */
+  .word.sung{color:rgba(255,255,255,.92);}
+  .word.active,
+  .line.active .word.active{
+    color:var(--accent-soft);
+    text-shadow:0 0 8px rgba(255,79,135,.35), 0 0 20px rgba(255,79,135,.15);
+    transform:translateY(-2px);
+  }
+  .line.active .word.sung{color:rgba(255,255,255,.92);}
+  .line.past .word.sung{color:rgba(255,255,255,.92);}
 
-    .player-card {
-        padding-top: 20px;
-    }
+  .lyrics-empty-wrap{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
-    .song-title {
-        font-size: 21px;
-    }
-
-    .control {
-        width: 40px;
-        height: 40px;
-    }
-
-    .play-button {
-        width: 57px;
-        height: 57px;
-    }
-
-    .lyrics-card {
-        height: 58vh;
-    }
-}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important;}
+  }
 </style>
 </head>
-
 <body>
 
-<div class="app">
-    <div class="background"></div>
+<main class="app">
 
-    <main class="player">
+  <section class="player" aria-label="Pemutar musik">
+    <div class="cover-wrap">
+      <img id="cover" class="cover" src="cover.jpg" alt="Sampul album"
+           onerror="this.classList.add('cover--fallback'); this.onerror=null;">
+    </div>
 
-        <section class="player-card">
+    <div class="track-info">
+      <h1 class="track-title" id="trackTitle">Memuat…</h1>
+      <p class="track-artist" id="trackArtist">—</p>
+      <p class="track-album" id="trackAlbum">—</p>
+    </div>
 
-            <div class="cover-wrapper">
-                <img
-                    id="cover"
-                    class="cover"
-                    src="cover.jpg"
-                    alt="Album cover"
-                >
-                <div class="cover-glow"></div>
-            </div>
+    <div class="progress-wrap">
+      <input type="range" id="progress" min="0" max="100" value="0" step="0.01" aria-label="Posisi lagu">
+      <div class="time-row">
+        <span id="currentTime">0:00</span>
+        <span id="totalTime">0:00</span>
+      </div>
+    </div>
 
-            <div class="song-info">
-                <h1 id="songTitle" class="song-title">Loading...</h1>
-                <p id="songArtist" class="song-artist">Unknown Artist</p>
-                <p id="songAlbum" class="song-album">Unknown Album</p>
-            </div>
+    <div class="controls-row">
+      <button type="button" class="ctrl-btn" id="btnBack" aria-label="Mundur 5 detik">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 5V1L5 7l6 6V9c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H3c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+      </button>
+      <button type="button" class="ctrl-btn ctrl-btn--main" id="btnPlay" aria-label="Play">
+        <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+      </button>
+      <button type="button" class="ctrl-btn" id="btnForward" aria-label="Maju 5 detik">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 5V1l6 6-6 6V9c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg>
+      </button>
+    </div>
 
-            <div class="progress-area">
-                <input
-                    id="progress"
-                    class="progress"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="0"
-                    step="0.01"
-                    aria-label="Progress"
-                >
+    <div class="volume-row">
+      <button type="button" class="icon-btn" id="btnMute" aria-label="Bisukan">
+        <svg class="icon-vol" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2A4.5 4.5 0 0 0 14.5 8v8a4.5 4.5 0 0 0 2-6z"/></svg>
+        <svg class="icon-muted" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4h4l5 5V5L7 10H3zm13.59 2 2.7-2.7-1.41-1.41L15.18 10l-2.7-2.7-1.41 1.41L13.77 11l-2.7 2.7 1.41 1.41 2.7-2.7 2.7 2.7 1.41-1.41z"/></svg>
+      </button>
+      <input type="range" id="volume" min="0" max="100" value="80" aria-label="Volume">
+    </div>
 
-                <div class="time-row">
-                    <span id="currentTime">0:00</span>
-                    <span id="duration">0:00</span>
-                </div>
-            </div>
+    <p class="audio-error" id="audioError" hidden>Audio gagal dimuat</p>
+  </section>
 
-            <div class="controls">
+  <section class="lyrics-panel" aria-label="Lirik lagu">
+    <div class="lyrics-fade lyrics-fade--top"></div>
+    <div class="lyrics-scroll" id="lyricsScroll">
+      <div id="lyricsContainer"></div>
+    </div>
+    <div class="lyrics-fade lyrics-fade--bottom"></div>
+  </section>
 
-                <button
-                    id="backButton"
-                    class="control"
-                    title="Mundur 5 detik"
-                    aria-label="Mundur 5 detik"
-                >
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M11 6v12l-8.5-6L11 6Zm1.5 0v12l8.5-6-8.5-6Z"/>
-                    </svg>
-                </button>
+</main>
 
-                <button
-                    id="playButton"
-                    class="control play-button"
-                    title="Play"
-                    aria-label="Play"
-                >
-                    <svg id="playIcon" class="icon" viewBox="0 0 24 24">
-                        <path d="M8 5.2v13.6c0 .8.9 1.3 1.6.9l10-6.8c.6-.4.6-1.3 0-1.7l-10-6.8C8.9 4 8 4.4 8 5.2Z"/>
-                    </svg>
-                </button>
-
-                <button
-                    id="forwardButton"
-                    class="control"
-                    title="Maju 5 detik"
-                    aria-label="Maju 5 detik"
-                >
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M13 6v12l8.5-6L13 6Zm-1.5 0v12L3 12l8.5-6Z"/>
-                    </svg>
-                </button>
-
-            </div>
-
-            <div class="volume-row">
-
-                <button
-                    id="muteButton"
-                    class="control"
-                    style="width:34px;height:34px;"
-                    title="Mute"
-                    aria-label="Mute"
-                >
-                    <svg id="volumeIcon" class="icon" viewBox="0 0 24 24">
-                        <path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.1-3.8v7.6a4.5 4.5 0 0 0 2.1-3.8Zm0-8.3v2.1c2.8 1 4.8 3.5 4.8 6.2s-2 5.2-4.8 6.2v2.1c4-1.1 6.8-4.4 6.8-8.3s-2.8-7.2-6.8-8.3Z"/>
-                    </svg>
-                </button>
-
-                <input
-                    id="volume"
-                    class="volume"
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value=".8"
-                    aria-label="Volume"
-                >
-
-            </div>
-
-            <div id="status" class="status">
-                Ready
-            </div>
-
-            <audio id="audio" preload="metadata">
-                <source src="music.mp3" type="audio/mpeg">
-            </audio>
-
-        </section>
-
-        <section class="lyrics-card">
-
-            <div class="lyrics-header">
-                <div class="lyrics-label">Lyrics</div>
-            </div>
-
-            <div
-                id="lyricsSection"
-                class="lyrics-section"
-                aria-label="Lyrics"
-            >
-                <div class="empty">
-                    <div>
-                        <strong>Loading lyrics...</strong>
-                        <span>Membaca lyric.lrc</span>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-    </main>
-</div>
+<audio id="audio" preload="metadata" src="music.mp3"></audio>
 
 <script>
-"use strict";
+(function(){
+  "use strict";
 
-/* =========================================================
-   DOM
-========================================================= */
+  /* ================= DOM refs ================= */
+  const audio        = document.getElementById('audio');
+  const cover         = document.getElementById('cover');
+  const trackTitleEl  = document.getElementById('trackTitle');
+  const trackArtistEl = document.getElementById('trackArtist');
+  const trackAlbumEl  = document.getElementById('trackAlbum');
+  const progressEl    = document.getElementById('progress');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalTimeEl   = document.getElementById('totalTime');
+  const btnPlay        = document.getElementById('btnPlay');
+  const btnBack        = document.getElementById('btnBack');
+  const btnForward     = document.getElementById('btnForward');
+  const btnMute         = document.getElementById('btnMute');
+  const volumeEl        = document.getElementById('volume');
+  const audioErrorEl    = document.getElementById('audioError');
+  const lyricsScrollEl  = document.getElementById('lyricsScroll');
+  const lyricsContainer = document.getElementById('lyricsContainer');
 
-const audio = document.getElementById("audio");
-const cover = document.getElementById("cover");
+  /* ================= State ================= */
+  const state = {
+    meta: {},
+    lines: [],
+    activeLineIndex: -1,
+    lastActiveWordLineIdx: -1,
+    lastActiveWordIdx: -1,
+    isSeeking: false
+  };
 
-const playButton = document.getElementById("playButton");
-const playIcon = document.getElementById("playIcon");
+  /* ================= Utilities ================= */
 
-const backButton = document.getElementById("backButton");
-const forwardButton = document.getElementById("forwardButton");
+  function formatTime(seconds){
+    if (!isFinite(seconds) || seconds < 0) return '0:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return m + ':' + String(s).padStart(2, '0');
+  }
 
-const progress = document.getElementById("progress");
-const volume = document.getElementById("volume");
+  function setRangeFill(el, percent){
+    const p = Math.max(0, Math.min(100, percent || 0));
+    el.style.background =
+      'linear-gradient(to right, #ff4f87 0%, #ff91b0 ' + p + '%, rgba(255,255,255,.12) ' + p + '%, rgba(255,255,255,.12) 100%)';
+  }
 
-const muteButton = document.getElementById("muteButton");
-const volumeIcon = document.getElementById("volumeIcon");
+  // Normalise common mis-decoded UTF-8 (mojibake) sequences found in LRC files.
+  function normalizeEncoding(text){
+    const replacements = [
+      ['â€™', '\u2019'],
+      ['â€œ', '\u201C'],
+      ['â€\x9d', '\u201D'],
+      ['â€“', '\u2013'],
+      ['â€”', '\u2014'],
+      ['â€¦', '\u2026'],
+      ['Ã©', '\u00E9'],
+      ['Ã¨', '\u00E8'],
+      ['Ã¡', '\u00E1'],
+      ['Ã­', '\u00ED'],
+      ['Ã³', '\u00F3'],
+      ['Ã±', '\u00F1'],
+      ['â€', '\u201D']
+    ];
+    let out = text;
+    for (const [bad, good] of replacements){
+      out = out.split(bad).join(good);
+    }
+    return out;
+  }
 
-const currentTimeEl = document.getElementById("currentTime");
-const durationEl = document.getElementById("duration");
+  /* ================= LRC parsing ================= */
 
-const songTitle = document.getElementById("songTitle");
-const songArtist = document.getElementById("songArtist");
-const songAlbum = document.getElementById("songAlbum");
+  function parseTimeToSeconds(min, sec){
+    return parseInt(min, 10) * 60 + parseFloat(sec);
+  }
 
-const lyricsSection = document.getElementById("lyricsSection");
-const statusEl = document.getElementById("status");
+  // Parses a line's content (after the leading [mm:ss.xx]) into word objects,
+  // reading inline <mm:ss.xx> word-level timestamps.
+  function parseWords(lineTimeSec, content){
+    const wordTagRegex = /<(\d{2}):(\d{2}(?:\.\d{1,3})?)>/g;
+    const segments = [];
+    let lastIndex = 0;
+    let currentTime = lineTimeSec;
+    let match;
 
+    while ((match = wordTagRegex.exec(content)) !== null){
+      segments.push({ text: content.slice(lastIndex, match.index), time: currentTime });
+      currentTime = parseTimeToSeconds(match[1], match[2]);
+      lastIndex = wordTagRegex.lastIndex;
+    }
+    segments.push({ text: content.slice(lastIndex), time: currentTime });
 
-/* =========================================================
-   STATE
-========================================================= */
+    const words = [];
+    segments.forEach(seg => {
+      const tokens = seg.text.trim().split(/\s+/).filter(Boolean);
+      tokens.forEach(t => words.push({ text: t, start: seg.time, end: null }));
+    });
 
-let lyrics = [];
-let metadata = {};
+    for (let i = 0; i < words.length - 1; i++){
+      words[i].end = words[i + 1].start;
+    }
+    return words;
+  }
 
-let activeLineIndex = -1;
-let previousActiveLineIndex = -1;
+  function parseLRC(rawText){
+    const text = normalizeEncoding(rawText);
+    const rawLines = text.split(/\r?\n/);
 
-let lastRenderedSecond = -1;
-let previousVolume = 0.8;
+    const meta = { id:'', ar:'', al:'', ti:'', length:'' };
+    const lyricLines = [];
 
+    const metaRegex = /^\[(id|ar|al|ti|length):\s*(.*?)\]\s*$/i;
+    const lineTimeRegex = /^\[(\d{2}):(\d{2}(?:\.\d{1,3})?)\](.*)$/;
 
-/* =========================================================
-   UTILITIES
-========================================================= */
+    rawLines.forEach(rawLine => {
+      const line = rawLine.trim();
+      if (!line) return;
 
-function formatTime(seconds) {
-    if (!Number.isFinite(seconds) || seconds < 0) {
-        return "0:00";
+      const metaMatch = line.match(metaRegex);
+      if (metaMatch){
+        meta[metaMatch[1].toLowerCase()] = metaMatch[2].trim();
+        return;
+      }
+
+      const timeMatch = line.match(lineTimeRegex);
+      if (timeMatch){
+        const lineTime = parseTimeToSeconds(timeMatch[1], timeMatch[2]);
+        const words = parseWords(lineTime, timeMatch[3]);
+        if (words.length){
+          lyricLines.push({ time: lineTime, words, endTime: null });
+        }
+      }
+    });
+
+    lyricLines.sort((a, b) => a.time - b.time);
+
+    for (let i = 0; i < lyricLines.length; i++){
+      const nextStart = (i < lyricLines.length - 1) ? lyricLines[i + 1].time : lyricLines[i].time + 6;
+      lyricLines[i].endTime = nextStart;
+      const words = lyricLines[i].words;
+      if (words.length) words[words.length - 1].end = nextStart;
     }
 
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
+    return { meta, lines: lyricLines };
+  }
 
-    return `${minutes}:${String(secs).padStart(2, "0")}`;
-}
+  /* ================= Loading ================= */
 
-
-/*
- * Memperbaiki mojibake umum akibat encoding UTF-8
- * yang salah terbaca sebagai Windows-1252 / Latin-1.
- */
-function normalizeText(text) {
-    if (!text) return "";
-
-    let result = text;
-
-    const replacements = {
-        "â€“": "–",
-        "â€”": "—",
-        "â€˜": "‘",
-        "â€™": "’",
-        "â€œ": "“",
-        "â€": "”",
-        "â€¦": "…",
-        "Â ": " ",
-        "Â": "",
-        "â€¢": "•",
-        "â„¢": "™",
-        "âˆ’": "−",
-        "ï¿½": "�"
-    };
-
-    for (const [bad, good] of Object.entries(replacements)) {
-        result = result.split(bad).join(good);
-    }
-
-    return result.normalize("NFC");
-}
-
-
-/* =========================================================
-   LRC PARSER
-========================================================= */
-
-function timeToSeconds(minute, second, fraction = "0") {
-    const sec = Number(second);
-
-    /*
-     * LRC biasanya memakai centisecond:
-     * 00:15.05 = 15.05
-     *
-     * Jika fraction memiliki 1 digit:
-     * .5 -> .5
-     *
-     * Jika memiliki 2 digit:
-     * .05 -> .05
-     *
-     * Jika lebih panjang:
-     * dikonversi sebagai decimal.
-     */
-    const decimal = Number(`0.${fraction}`);
-
-    return (Number(minute) * 60) + sec + decimal;
-}
-
-
-function parseLRC(text) {
-    const result = {
-        metadata: {},
-        lines: []
-    };
-
-    text = normalizeText(text);
-
-    const rawLines = text
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .split("\n");
-
-    /*
-     * Timestamp line-level:
-     * [00:15.05]I know...
-     *
-     * Word timestamp:
-     * [00:15.05]I <00:15.52>know <00:16.02>that
-     */
-    const lineTimestampRegex =
-        /\[(\d{1,3}):(\d{2})(?:[.:](\d{1,3}))?\]/g;
-
-    const wordTimestampRegex =
-        /<(\d{1,3}):(\d{2})(?:[.:](\d{1,3}))?>/g;
-
-    for (const rawLine of rawLines) {
-
-        const line = rawLine.trim();
-
-        if (!line) continue;
-
-        /*
-         * Metadata
-         */
-        const metadataMatch = line.match(
-            /^\[([a-zA-Z]+):\s*(.*?)\]$/
-        );
-
-        if (metadataMatch) {
-            const key = metadataMatch[1].toLowerCase();
-            const value = normalizeText(metadataMatch[2]);
-
-            result.metadata[key] = value;
-            continue;
-        }
-
-        /*
-         * Ambil timestamp line-level.
-         */
-        const timestamps = [];
-        let match;
-
-        lineTimestampRegex.lastIndex = 0;
-
-        while ((match = lineTimestampRegex.exec(line)) !== null) {
-            const seconds = timeToSeconds(
-                match[1],
-                match[2],
-                match[3] || "0"
-            );
-
-            timestamps.push(seconds);
-        }
-
-        if (!timestamps.length) continue;
-
-        /*
-         * Hapus timestamp pertama dari awal.
-         * Timestamp tambahan dianggap repeat timestamp.
-         */
-        const firstTimestampEnd = line.indexOf("]");
-
-        if (firstTimestampEnd === -1) continue;
-
-        const content = line
-            .slice(firstTimestampEnd + 1)
-            .trim();
-
-        /*
-         * Parse word-level timestamp.
-         */
-        const words = [];
-
-        let lastIndex = 0;
-        let wordMatch;
-
-        wordTimestampRegex.lastIndex = 0;
-
-        /*
-         * Teks sebelum timestamp kata pertama
-         * memakai timestamp line sebagai timestamp awal.
-         */
-        while ((wordMatch = wordTimestampRegex.exec(content)) !== null) {
-
-            const textBefore = content
-                .slice(lastIndex, wordMatch.index)
-                .trim();
-
-            if (textBefore) {
-                words.push({
-                    text: textBefore,
-                    time: null
-                });
-            }
-
-            const wordTime = timeToSeconds(
-                wordMatch[1],
-                wordMatch[2],
-                wordMatch[3] || "0"
-            );
-
-            words.push({
-                text: "",
-                time: wordTime
-            });
-
-            lastIndex = wordTimestampRegex.lastIndex;
-        }
-
-        /*
-         * Cara di atas menghasilkan timestamp sebagai token kosong.
-         * Sekarang gabungkan timestamp dengan kata berikutnya.
-         */
-        const reconstructedWords = [];
-
-        if (wordTimestampRegex.test(content)) {
-
-            const parts = [];
-            let cursor = 0;
-
-            wordTimestampRegex.lastIndex = 0;
-
-            while ((wordMatch = wordTimestampRegex.exec(content)) !== null) {
-
-                const textPart = content.slice(
-                    cursor,
-                    wordMatch.index
-                ).trim();
-
-                const timestamp = timeToSeconds(
-                    wordMatch[1],
-                    wordMatch[2],
-                    wordMatch[3] || "0"
-                );
-
-                if (textPart) {
-                    parts.push({
-                        text: textPart,
-                        time: timestamp
-                    });
-                }
-
-                cursor = wordTimestampRegex.lastIndex;
-            }
-
-            const finalText = content.slice(cursor).trim();
-
-            if (finalText) {
-                /*
-                 * Jika ada timestamp terakhir, kata setelahnya
-                 * menggunakan timestamp tersebut.
-                 */
-                const lastTimestamp = parts.length
-                    ? parts[parts.length - 1].time
-                    : timestamps[0];
-
-                parts.push({
-                    text: finalText,
-                    time: lastTimestamp
-                });
-            }
-
-            reconstructedWords.push(...parts);
-        }
-
-        const finalWords = reconstructedWords.length
-            ? reconstructedWords
-            : [{
-                text: content,
-                time: timestamps[0]
-            }];
-
-        /*
-         * Jika ada beberapa timestamp line-level,
-         * buat line terpisah.
-         */
-        for (const start of timestamps) {
-
-            result.lines.push({
-                time: start,
-                text: content,
-                words: finalWords.map(word => ({
-                    text: word.text,
-                    time: word.time
-                }))
-            });
-        }
-    }
-
-    /*
-     * Sort timestamp.
-     */
-    result.lines.sort((a, b) => a.time - b.time);
-
-    /*
-     * Jika word timestamp tidak tersedia,
-     * gunakan timestamp line sebagai fallback.
-     */
-    for (const line of result.lines) {
-        line.words = line.words.filter(
-            word => word.text
-        );
-
-        if (!line.words.length && line.text) {
-            line.words = [{
-                text: line.text,
-                time: line.time
-            }];
-        }
-    }
-
-    return result;
-}
-
-
-/* =========================================================
-   LOAD LYRICS
-========================================================= */
-
-async function loadLyrics() {
-
+  async function loadLyrics(){
     try {
+      const res = await fetch('lyric.lrc');
+      if (!res.ok) throw new Error('lrc not found');
+      const text = await res.text();
+      const parsed = parseLRC(text);
+      state.meta = parsed.meta;
+      state.lines = parsed.lines;
 
-        statusEl.textContent = "Loading lyrics...";
+      if (!state.lines.length) throw new Error('lrc empty');
 
-        const response = await fetch(
-            "lyric.lrc",
-            {
-                cache: "no-cache"
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-        }
-
-        const text = await response.text();
-
-        if (!text.trim()) {
-            throw new Error("LRC kosong");
-        }
-
-        const parsed = parseLRC(text);
-
-        metadata = parsed.metadata;
-        lyrics = parsed.lines;
-
-        renderLyrics();
-        applyMetadata();
-
-        statusEl.textContent =
-            `${lyrics.length} lyric lines`;
-
-    } catch (error) {
-
-        console.error("Lyrics error:", error);
-
-        lyrics = [];
-
-        lyricsSection.innerHTML = `
-            <div class="empty">
-                <div>
-                    <strong>Lyrics tidak ditemukan</strong>
-                    <span>Pastikan file lyric.lrc berada di folder yang sama.</span>
-                </div>
-            </div>
-        `;
-
-        statusEl.textContent =
-            "Lyrics tidak ditemukan";
+      updateMetaUI();
+      renderLyrics();
+    } catch (err){
+      showLyricsError('Lyrics tidak ditemukan');
     }
-}
+  }
 
+  function updateMetaUI(){
+    const meta = state.meta;
+    trackTitleEl.textContent  = meta.ti || 'Untitled';
+    trackArtistEl.textContent = meta.ar || 'Unknown Artist';
+    trackAlbumEl.textContent  = meta.al || '';
+    if (meta.length) totalTimeEl.textContent = meta.length;
+    if (meta.ti) document.title = meta.ti + (meta.ar ? ' — ' + meta.ar : '');
+  }
 
-/* =========================================================
-   METADATA
-========================================================= */
+  function showLyricsError(message){
+    lyricsContainer.innerHTML = '';
+    const wrap = document.createElement('div');
+    wrap.className = 'lyrics-empty-wrap';
+    const p = document.createElement('p');
+    p.className = 'lyrics-error';
+    p.textContent = message;
+    wrap.appendChild(p);
+    lyricsContainer.appendChild(wrap);
+  }
 
-function applyMetadata() {
+  function showAudioError(message){
+    audioErrorEl.textContent = message || 'Audio gagal dimuat';
+    audioErrorEl.hidden = false;
+  }
 
-    songTitle.textContent =
-        metadata.ti || "Unknown Title";
+  /* ================= Rendering ================= */
 
-    songArtist.textContent =
-        metadata.ar || "Unknown Artist";
+  function renderLyrics(){
+    lyricsContainer.innerHTML = '';
+    const frag = document.createDocumentFragment();
 
-    songAlbum.textContent =
-        metadata.al || "Unknown Album";
+    state.lines.forEach((line, i) => {
+      const lineEl = document.createElement('div');
+      lineEl.className = 'line upcoming';
+      lineEl.dataset.index = String(i);
 
-    if (metadata.length) {
-        durationEl.textContent =
-            normalizeText(metadata.length);
-    }
-}
+      line.words.forEach(word => {
+        const wordEl = document.createElement('span');
+        wordEl.className = 'word';
+        wordEl.textContent = word.text;
+        lineEl.appendChild(wordEl);
+      });
 
+      lineEl.addEventListener('click', () => {
+        if (isFinite(audio.duration)) audio.currentTime = Math.min(line.time, audio.duration);
+        else audio.currentTime = line.time;
+      });
 
-/* =========================================================
-   RENDER LYRICS
-========================================================= */
-
-function renderLyrics() {
-
-    if (!lyrics.length) {
-        lyricsSection.innerHTML = `
-            <div class="empty">
-                <div>
-                    <strong>Lyrics tidak ditemukan</strong>
-                    <span>File LRC tidak memiliki timestamp yang valid.</span>
-                </div>
-            </div>
-        `;
-        return;
-    }
-
-    const fragment = document.createDocumentFragment();
-
-    lyrics.forEach((line, lineIndex) => {
-
-        const lineElement =
-            document.createElement("div");
-
-        lineElement.className =
-            "line future";
-
-        lineElement.dataset.index =
-            lineIndex;
-
-        lineElement.dataset.time =
-            line.time;
-
-        /*
-         * Render setiap kata sebagai span.
-         */
-        line.words.forEach((word, wordIndex) => {
-
-            const wordElement =
-                document.createElement("span");
-
-            wordElement.className = "word";
-
-            wordElement.textContent =
-                word.text;
-
-            wordElement.dataset.time =
-                word.time;
-
-            wordElement.dataset.wordIndex =
-                wordIndex;
-
-            lineElement.appendChild(wordElement);
-
-        });
-
-        fragment.appendChild(lineElement);
+      frag.appendChild(lineEl);
     });
 
-    lyricsSection.innerHTML = "";
-    lyricsSection.appendChild(fragment);
-}
+    lyricsContainer.appendChild(frag);
+  }
 
+  /* ================= Playback UI ================= */
 
-/* =========================================================
-   FIND ACTIVE LINE
-========================================================= */
-
-function findActiveLine(time) {
-
-    let index = -1;
-
-    /*
-     * Binary search supaya efisien
-     * walaupun LRC memiliki banyak baris.
-     */
-    let low = 0;
-    let high = lyrics.length - 1;
-
-    while (low <= high) {
-
-        const mid = (low + high) >> 1;
-
-        if (lyrics[mid].time <= time) {
-            index = mid;
-            low = mid + 1;
-        } else {
-            high = mid - 1;
-        }
+  function updatePlayer(){
+    if (!state.isSeeking){
+      progressEl.value = audio.currentTime || 0;
+      const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      setRangeFill(progressEl, pct);
+      currentTimeEl.textContent = formatTime(audio.currentTime || 0);
     }
-
-    return index;
-}
-
-
-/* =========================================================
-   UPDATE LINE STATES
-========================================================= */
-
-function updateLineStates(time) {
-
-    if (!lyrics.length) return;
-
-    activeLineIndex = findActiveLine(time);
-
-    /*
-     * Jangan melakukan pekerjaan DOM berat
-     * jika baris aktif belum berubah.
-     */
-    if (
-        activeLineIndex === previousActiveLineIndex
-    ) {
-        return;
+    if (audio.duration && isFinite(audio.duration)){
+      progressEl.max = audio.duration;
+      totalTimeEl.textContent = formatTime(audio.duration);
     }
+  }
 
-    const lineElements =
-        lyricsSection.querySelectorAll(".line");
+  function togglePlay(){
+    if (audio.paused){
+      const p = audio.play();
+      if (p && p.catch) p.catch(() => showAudioError());
+    } else {
+      audio.pause();
+    }
+  }
 
-    lineElements.forEach((element, index) => {
+  /* ================= Lyrics sync ================= */
 
-        element.classList.remove(
-            "past",
-            "active",
-            "future"
-        );
+  function findActiveLineIndex(time){
+    const lines = state.lines;
+    if (!lines.length || time < lines[0].time) return -1;
+    let lo = 0, hi = lines.length - 1, res = -1;
+    while (lo <= hi){
+      const mid = (lo + hi) >> 1;
+      if (lines[mid].time <= time){ res = mid; lo = mid + 1; }
+      else hi = mid - 1;
+    }
+    return res;
+  }
 
-        if (index < activeLineIndex) {
-            element.classList.add("past");
+  function updateLineStates(activeIndex){
+    const children = lyricsContainer.children;
+    for (let i = 0; i < children.length; i++){
+      const el = children[i];
+      el.classList.remove('past', 'active', 'upcoming');
+      const words = el.querySelectorAll('.word');
+      if (i < activeIndex){
+        el.classList.add('past');
+        words.forEach(w => { w.classList.remove('active'); w.classList.add('sung'); });
+      } else if (i === activeIndex){
+        el.classList.add('active');
+      } else {
+        el.classList.add('upcoming');
+        words.forEach(w => { w.classList.remove('active', 'sung'); });
+      }
+    }
+  }
 
-        } else if (index === activeLineIndex) {
-            element.classList.add("active");
+  function scrollToActiveLine(){
+    const idx = state.activeLineIndex;
+    if (idx < 0) return;
+    const lineEl = lyricsContainer.children[idx];
+    if (!lineEl) return;
+    const target = lineEl.offsetTop - (lyricsScrollEl.clientHeight / 2) + (lineEl.clientHeight / 2);
+    lyricsScrollEl.scrollTo({ top: target, behavior: 'smooth' });
+  }
 
-        } else {
-            element.classList.add("future");
-        }
+  function updateActiveWords(time){
+    const idx = state.activeLineIndex;
+    if (idx < 0 || idx >= state.lines.length) return;
+    const line = state.lines[idx];
+    let activeWordIdx = -1;
+    for (let i = 0; i < line.words.length; i++){
+      if (line.words[i].start <= time) activeWordIdx = i; else break;
+    }
+    if (activeWordIdx === state.lastActiveWordIdx && idx === state.lastActiveWordLineIdx) return;
+    state.lastActiveWordIdx = activeWordIdx;
+    state.lastActiveWordLineIdx = idx;
+
+    const lineEl = lyricsContainer.children[idx];
+    if (!lineEl) return;
+    const wordEls = lineEl.querySelectorAll('.word');
+    wordEls.forEach((el, i) => {
+      el.classList.remove('sung', 'active');
+      if (i < activeWordIdx) el.classList.add('sung');
+      else if (i === activeWordIdx) el.classList.add('active');
+    });
+  }
+
+  function updateLyrics(time){
+    const newIndex = findActiveLineIndex(time);
+    if (newIndex !== state.activeLineIndex){
+      updateLineStates(newIndex);
+      state.activeLineIndex = newIndex;
+      state.lastActiveWordIdx = -1;
+      state.lastActiveWordLineIdx = -1;
+      scrollToActiveLine();
+    }
+    updateActiveWords(time);
+  }
+
+  /* ================= Events ================= */
+
+  function bindEvents(){
+    btnPlay.addEventListener('click', togglePlay);
+    btnBack.addEventListener('click', () => {
+      audio.currentTime = Math.max(0, audio.currentTime - 5);
+    });
+    btnForward.addEventListener('click', () => {
+      const max = isFinite(audio.duration) ? audio.duration : audio.currentTime + 5;
+      audio.currentTime = Math.min(max, audio.currentTime + 5);
     });
 
-    /*
-     * Auto-scroll hanya saat active line berubah.
-     */
-    if (
-        activeLineIndex !== -1 &&
-        activeLineIndex !== previousActiveLineIndex
-    ) {
-
-        const target =
-            lineElements[activeLineIndex];
-
-        if (target) {
-
-            const containerHeight =
-                lyricsSection.clientHeight;
-
-            const targetTop =
-                target.offsetTop -
-                (containerHeight / 2) +
-                (target.offsetHeight / 2);
-
-            lyricsSection.scrollTo({
-                top: Math.max(0, targetTop),
-                behavior: "smooth"
-            });
-        }
-    }
-
-    previousActiveLineIndex =
-        activeLineIndex;
-}
-
-
-/* =========================================================
-   WORD-LEVEL KARAOKE
-========================================================= */
-
-function updateLyrics(time) {
-
-    if (!lyrics.length) return;
-
-    /*
-     * Update line state terlebih dahulu.
-     */
-    updateLineStates(time);
-
-    if (
-        activeLineIndex < 0 ||
-        !lyrics[activeLineIndex]
-    ) {
-        return;
-    }
-
-    const line =
-        lyrics[activeLineIndex];
-
-    const lineElement =
-        lyricsSection.querySelector(
-            `.line[data-index="${activeLineIndex}"]`
-        );
-
-    if (!lineElement) return;
-
-    const wordElements =
-        lineElement.querySelectorAll(".word");
-
-    /*
-     * Set status masing-masing kata.
-     */
-    wordElements.forEach((wordElement, index) => {
-
-        const wordTime =
-            Number(wordElement.dataset.time);
-
-        const nextWord =
-            wordElements[index + 1];
-
-        const nextTime = nextWord
-            ? Number(nextWord.dataset.time)
-            : Infinity;
-
-        wordElement.classList.remove(
-            "active",
-            "sung"
-        );
-
-        /*
-         * Belum dinyanyikan
-         */
-        if (time < wordTime) {
-            return;
-        }
-
-        /*
-         * Sedang dinyanyikan
-         */
-        if (
-            time >= wordTime &&
-            time < nextTime
-        ) {
-            wordElement.classList.add("active");
-            return;
-        }
-
-        /*
-         * Sudah dinyanyikan
-         */
-        wordElement.classList.add("sung");
+    audio.addEventListener('play', () => {
+      btnPlay.classList.add('is-playing');
+      btnPlay.setAttribute('aria-label', 'Pause');
+      cover.classList.add('is-playing');
     });
-}
-
-
-/* =========================================================
-   PLAYER UPDATE
-========================================================= */
-
-function updatePlayer() {
-
-    const current =
-        audio.currentTime || 0;
-
-    const total =
-        audio.duration || 0;
-
-    currentTimeEl.textContent =
-        formatTime(current);
-
-    if (Number.isFinite(total)) {
-        durationEl.textContent =
-            formatTime(total);
-    }
-
-    const percent =
-        total > 0
-            ? (current / total) * 100
-            : 0;
-
-    progress.value = percent;
-
-    progress.style.setProperty(
-        "--progress",
-        `${percent}%`
-    );
-
-    /*
-     * Hindari update lyrics berlebihan.
-     */
-    const second =
-        Math.floor(current * 20);
-
-    if (second !== lastRenderedSecond) {
-
-        lastRenderedSecond = second;
-
-        updateLyrics(current);
-    }
-}
-
-
-/* =========================================================
-   PLAY / PAUSE
-========================================================= */
-
-async function togglePlay() {
-
-    try {
-
-        if (audio.paused) {
-            await audio.play();
-        } else {
-            audio.pause();
-        }
-
-    } catch (error) {
-
-        console.error("Playback error:", error);
-
-        statusEl.textContent =
-            "Audio gagal diputar";
-    }
-}
-
-
-function updatePlayUI() {
-
-    if (audio.paused) {
-
-        /*
-         * Play icon
-         */
-        playIcon.innerHTML = `
-            <path d="M8 5.2v13.6c0 .8.9 1.3 1.6.9l10-6.8c.6-.4.6-1.3 0-1.7l-10-6.8C8.9 4 8 4.4 8 5.2Z"/>
-        `;
-
-        playButton.setAttribute(
-            "aria-label",
-            "Play"
-        );
-
-        playButton.title = "Play";
-
-        cover.classList.remove("playing");
-
-        statusEl.textContent = "Paused";
-
-    } else {
-
-        /*
-         * Pause icon
-         */
-        playIcon.innerHTML = `
-            <path d="M7 5h3v14H7V5Zm7 0h3v14h-3V5Z"/>
-        `;
-
-        playButton.setAttribute(
-            "aria-label",
-            "Pause"
-        );
-
-        playButton.title = "Pause";
-
-        cover.classList.add("playing");
-
-        statusEl.textContent = "Playing";
-    }
-}
-
-
-/* =========================================================
-   PROGRESS SEEK
-========================================================= */
-
-progress.addEventListener("input", () => {
-
-    if (!Number.isFinite(audio.duration)) {
-        return;
-    }
-
-    const percent =
-        Number(progress.value);
-
-    audio.currentTime =
-        audio.duration * (percent / 100);
-
-    progress.style.setProperty(
-        "--progress",
-        `${percent}%`
-    );
-});
-
-
-/* =========================================================
-   VOLUME
-========================================================= */
-
-function updateVolumeUI() {
-
-    const value =
-        Number(volume.value);
-
-    const percentage =
-        value * 100;
-
-    volume.style.setProperty(
-        "--volume",
-        `${percentage}%`
-    );
-
-    if (audio.muted || value === 0) {
-
-        volumeIcon.innerHTML = `
-            <path d="M4 9v6h4l5 4V5L8 9H4Zm13.2 1.8-1.4 1.4 1.4 1.4 1.4-1.4-1.4-1.4Zm2.5-2.5-1.4 1.4L19.7 11l1.4-1.4-1.4-1.3Zm0 7.8-1.4-1.4-1.3 1.4 1.4 1.4 1.3-1.4Z"/>
-        `;
-
-    } else {
-
-        volumeIcon.innerHTML = `
-            <path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.1-3.8v7.6a4.5 4.5 0 0 0 2.1-3.8Zm0-8.3v2.1c2.8 1 4.8 3.5 4.8 6.2s-2 5.2-4.8 6.2v2.1c4-1.1 6.8-4.4 6.8-8.3s-2.8-7.2-6.8-8.3Z"/>
-        `;
-    }
-}
-
-
-volume.addEventListener("input", () => {
-
-    const value =
-        Number(volume.value);
-
-    audio.volume = value;
-
-    audio.muted = false;
-
-    previousVolume =
-        value > 0
-            ? value
-            : previousVolume;
-
-    updateVolumeUI();
-});
-
-
-muteButton.addEventListener("click", () => {
-
-    if (audio.muted || audio.volume === 0) {
-
-        audio.muted = false;
-
-        if (audio.volume === 0) {
-            audio.volume =
-                previousVolume || .8;
-
-            volume.value =
-                audio.volume;
-        }
-
-    } else {
-
-        previousVolume =
-            audio.volume;
-
-        audio.muted = true;
-    }
-
-    updateVolumeUI();
-});
-
-
-/* =========================================================
-   SEEK BUTTONS
-========================================================= */
-
-backButton.addEventListener("click", () => {
-
-    audio.currentTime =
-        Math.max(
-            0,
-            audio.currentTime - 5
-        );
-
-    updatePlayer();
-});
-
-
-forwardButton.addEventListener("click", () => {
-
-    audio.currentTime =
-        Math.min(
-            audio.duration || Infinity,
-            audio.currentTime + 5
-        );
-
-    updatePlayer();
-});
-
-
-/* =========================================================
-   KEYBOARD SHORTCUTS
-========================================================= */
-
-document.addEventListener("keydown", event => {
-
-    const target =
-        event.target;
-
-    const isInput =
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.isContentEditable;
-
-    if (isInput) return;
-
-    if (event.code === "Space") {
-
-        event.preventDefault();
-
+    audio.addEventListener('pause', () => {
+      btnPlay.classList.remove('is-playing');
+      btnPlay.setAttribute('aria-label', 'Play');
+      cover.classList.remove('is-playing');
+    });
+    audio.addEventListener('timeupdate', () => {
+      updatePlayer();
+      updateLyrics(audio.currentTime);
+    });
+    audio.addEventListener('loadedmetadata', updatePlayer);
+    audio.addEventListener('error', () => showAudioError('Audio gagal dimuat'));
+
+    cover.addEventListener('error', () => {
+      cover.classList.add('cover--fallback');
+    });
+
+    progressEl.addEventListener('mousedown', () => state.isSeeking = true);
+    progressEl.addEventListener('touchstart', () => state.isSeeking = true, { passive:true });
+    progressEl.addEventListener('input', () => {
+      const val = parseFloat(progressEl.value);
+      currentTimeEl.textContent = formatTime(val);
+      const pct = progressEl.max ? (val / progressEl.max) * 100 : 0;
+      setRangeFill(progressEl, pct);
+      audio.currentTime = val;
+    });
+    window.addEventListener('mouseup', () => state.isSeeking = false);
+    window.addEventListener('touchend', () => state.isSeeking = false);
+
+    volumeEl.addEventListener('input', () => {
+      const v = parseFloat(volumeEl.value);
+      audio.volume = v / 100;
+      audio.muted = false;
+      setRangeFill(volumeEl, v);
+    });
+    btnMute.addEventListener('click', () => {
+      audio.muted = !audio.muted;
+    });
+    audio.addEventListener('volumechange', () => {
+      const muted = audio.muted || audio.volume === 0;
+      btnMute.classList.toggle('is-muted', muted);
+      btnMute.setAttribute('aria-label', muted ? 'Aktifkan suara' : 'Bisukan');
+      if (!audio.muted){
+        volumeEl.value = Math.round(audio.volume * 100);
+        setRangeFill(volumeEl, audio.volume * 100);
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      const tag = document.activeElement ? document.activeElement.tagName : '';
+      const editable = document.activeElement && document.activeElement.isContentEditable;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || editable) return;
+
+      if (e.code === 'Space'){
+        e.preventDefault();
         togglePlay();
+      } else if (e.code === 'ArrowLeft'){
+        audio.currentTime = Math.max(0, audio.currentTime - 5);
+      } else if (e.code === 'ArrowRight'){
+        const max = isFinite(audio.duration) ? audio.duration : audio.currentTime + 5;
+        audio.currentTime = Math.min(max, audio.currentTime + 5);
+      }
+    });
+  }
 
-    } else if (event.code === "ArrowLeft") {
+  /* ================= Init ================= */
 
-        event.preventDefault();
-
-        audio.currentTime =
-            Math.max(
-                0,
-                audio.currentTime - 5
-            );
-
-        updatePlayer();
-
-    } else if (event.code === "ArrowRight") {
-
-        event.preventDefault();
-
-        audio.currentTime =
-            Math.min(
-                audio.duration || Infinity,
-                audio.currentTime + 5
-            );
-
-        updatePlayer();
+  function init(){
+    try {
+      bindEvents();
+      setRangeFill(progressEl, 0);
+      audio.volume = 0.8;
+      setRangeFill(volumeEl, 80);
+      loadLyrics();
+    } catch (err){
+      showLyricsError('Lyrics tidak ditemukan');
     }
-});
+  }
 
-
-/* =========================================================
-   AUDIO EVENTS
-========================================================= */
-
-audio.addEventListener("loadedmetadata", () => {
-
-    durationEl.textContent =
-        formatTime(audio.duration);
-
-    /*
-     * Jika LRC mempunyai length,
-     * duration audio tetap menjadi sumber utama.
-     */
-    if (Number.isFinite(audio.duration)) {
-        statusEl.textContent =
-            "Ready";
-    }
-});
-
-
-audio.addEventListener("timeupdate", updatePlayer);
-
-audio.addEventListener("play", () => {
-    updatePlayUI();
-});
-
-
-audio.addEventListener("pause", () => {
-    updatePlayUI();
-});
-
-
-audio.addEventListener("ended", () => {
-
-    updatePlayUI();
-
-    progress.value = 100;
-
-    progress.style.setProperty(
-        "--progress",
-        "100%"
-    );
-
-    /*
-     * Tandai semua lirik sebagai selesai.
-     */
-    lyricsSection
-        .querySelectorAll(".line")
-        .forEach(line => {
-            line.classList.remove(
-                "active",
-                "future"
-            );
-            line.classList.add("past");
-        });
-});
-
-
-audio.addEventListener("error", error => {
-
-    console.error(
-        "Audio failed:",
-        error
-    );
-
-    statusEl.textContent =
-        "Audio gagal dimuat";
-
-    songTitle.textContent =
-        metadata.ti || "Audio Error";
-});
-
-
-audio.addEventListener("waiting", () => {
-
-    statusEl.textContent =
-        "Buffering...";
-});
-
-
-audio.addEventListener("canplay", () => {
-
-    if (!audio.paused) {
-        statusEl.textContent =
-            "Playing";
-    } else {
-        statusEl.textContent =
-            "Ready";
-    }
-});
-
-
-/* =========================================================
-   BUTTON
-========================================================= */
-
-playButton.addEventListener(
-    "click",
-    togglePlay
-);
-
-
-/* =========================================================
-   COVER ERROR
-========================================================= */
-
-cover.addEventListener("error", () => {
-
-    /*
-     * Jangan membuat aplikasi crash
-     * jika cover.jpg tidak tersedia.
-     */
-    cover.style.opacity = "0";
-
-    statusEl.textContent =
-        "Cover tidak ditemukan";
-});
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-audio.volume = .8;
-volume.value = .8;
-
-updateVolumeUI();
-updatePlayUI();
-
-loadLyrics();
+  document.addEventListener('DOMContentLoaded', init);
+})();
 </script>
-
 </body>
 </html>
