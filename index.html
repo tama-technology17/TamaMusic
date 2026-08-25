@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -8,17 +10,17 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Tama Project Hub</title>
-
   <meta
     name="theme-color"
-    content="#08080a"
+    content="#070709"
   >
 
   <meta
     name="description"
-    content="Tama Project Hub - Collection of web projects"
+    content="Tama Project Hub"
   >
+
+  <title>Tama Project Hub</title>
 
   <style>
 
@@ -30,13 +32,23 @@
 
     :root {
       --bg: #070709;
-      --card: rgba(255,255,255,.055);
-      --card-hover: rgba(255,255,255,.085);
-      --border: rgba(255,255,255,.09);
-      --border-hover: rgba(255,255,255,.2);
 
-      --text: #ffffff;
+      --card:
+        rgba(255,255,255,.055);
+
+      --card-hover:
+        rgba(255,255,255,.085);
+
+      --border:
+        rgba(255,255,255,.09);
+
+      --border-hover:
+        rgba(255,255,255,.2);
+
+      --text: #fff;
+
       --muted: #8b8b94;
+
       --muted-2: #5e5e66;
 
       --success: #48e88b;
@@ -47,11 +59,11 @@
     }
 
     body {
+
       min-height: 100vh;
 
       font-family:
         Inter,
-        ui-sans-serif,
         system-ui,
         -apple-system,
         BlinkMacSystemFont,
@@ -61,38 +73,44 @@
       color: var(--text);
 
       background:
+
         radial-gradient(
           circle at 50% -10%,
-          rgba(120, 90, 255, .18),
+          rgba(120,90,255,.18),
           transparent 35%
         ),
+
         radial-gradient(
           circle at 0% 50%,
-          rgba(0, 160, 255, .05),
+          rgba(0,160,255,.05),
           transparent 30%
         ),
+
         var(--bg);
 
       overflow-x: hidden;
+
     }
 
-    /* =========================
-       BACKGROUND
-    ========================= */
+    /* GRID BACKGROUND */
 
     body::before {
+
       content: "";
 
       position: fixed;
+
       inset: 0;
 
       pointer-events: none;
 
       background-image:
+
         linear-gradient(
           rgba(255,255,255,.018) 1px,
           transparent 1px
         ),
+
         linear-gradient(
           90deg,
           rgba(255,255,255,.018) 1px,
@@ -111,35 +129,38 @@
         );
 
       z-index: -1;
+
     }
 
-    /* =========================
-       CONTAINER
-    ========================= */
+    /* CONTAINER */
 
     .container {
-      width: min(1100px, 100%);
+
+      width:
+        min(1100px,100%);
 
       margin: auto;
 
       padding:
         35px 18px 50px;
+
     }
 
-    /* =========================
-       HEADER
-    ========================= */
+    /* HEADER */
 
     header {
+
       text-align: center;
 
       margin-bottom: 35px;
 
       animation:
         fadeUp .7s ease both;
+
     }
 
     .logo {
+
       width: 60px;
       height: 60px;
 
@@ -147,56 +168,66 @@
         0 auto 20px;
 
       display: grid;
+
       place-items: center;
 
       border-radius: 18px;
 
-      color: #050505;
-
       background:
         linear-gradient(
           135deg,
-          #ffffff,
+          #fff,
           #bcbcbc
         );
 
+      color: #050505;
+
       font-size: 24px;
+
       font-weight: 800;
 
       box-shadow:
-        0 15px 50px rgba(255,255,255,.1);
+        0 15px 50px
+        rgba(255,255,255,.1);
+
     }
 
     h1 {
+
       font-size:
-        clamp(34px, 8vw, 58px);
+        clamp(34px,8vw,58px);
 
       line-height: 1;
 
-      letter-spacing: -2.5px;
+      letter-spacing:
+        -2.5px;
+
     }
 
     .subtitle {
+
       max-width: 550px;
 
       margin:
         14px auto 0;
 
-      color: var(--muted);
+      color:
+        var(--muted);
 
       font-size: 14px;
 
       line-height: 1.7;
+
     }
 
-    /* =========================
-       STATUS
-    ========================= */
+    /* STATUS */
 
     .status {
+
       display: inline-flex;
 
       align-items: center;
+
       gap: 8px;
 
       margin-top: 18px;
@@ -212,28 +243,33 @@
       background:
         rgba(255,255,255,.035);
 
-      color: #8f8f98;
+      color:
+        #8f8f98;
 
       font-size: 11px;
+
     }
 
     .status-dot {
+
       width: 7px;
       height: 7px;
 
       border-radius: 50%;
 
-      background: var(--success);
+      background:
+        var(--success);
 
       box-shadow:
-        0 0 12px var(--success);
+        0 0 12px
+        var(--success);
+
     }
 
-    /* =========================
-       SEARCH AREA
-    ========================= */
+    /* TOOLS */
 
     .tools {
+
       display: flex;
 
       align-items: center;
@@ -245,20 +281,22 @@
       margin:
         0 auto 30px;
 
-      animation:
-        fadeUp .7s .1s ease both;
     }
 
     .search-wrapper {
+
       position: relative;
 
       flex: 1;
+
     }
 
     .search-icon {
+
       position: absolute;
 
       left: 17px;
+
       top: 50%;
 
       transform:
@@ -269,10 +307,13 @@
       font-size: 18px;
 
       pointer-events: none;
+
     }
 
     #search {
+
       width: 100%;
+
       height: 52px;
 
       padding:
@@ -285,14 +326,15 @@
 
       outline: none;
 
-      color: white;
-
       background:
         rgba(255,255,255,.045);
+
+      color: white;
 
       font-size: 14px;
 
       transition: .25s;
+
     }
 
     #search::placeholder {
@@ -300,27 +342,26 @@
     }
 
     #search:focus {
+
       border-color:
         rgba(255,255,255,.22);
 
       background:
         rgba(255,255,255,.065);
 
-      box-shadow:
-        0 0 30px rgba(255,255,255,.035);
     }
 
-    /* =========================
-       REFRESH
-    ========================= */
+    /* REFRESH */
 
     .refresh {
+
       width: 52px;
       height: 52px;
 
       flex-shrink: 0;
 
       display: grid;
+
       place-items: center;
 
       border:
@@ -338,77 +379,72 @@
       cursor: pointer;
 
       transition: .25s;
+
     }
 
     .refresh:hover {
+
       color: white;
 
       border-color:
-        rgba(255,255,255,.22);
+        var(--border-hover);
 
       background:
         rgba(255,255,255,.075);
 
       transform:
         rotate(15deg);
+
     }
 
-    .refresh:active {
-      transform:
-        scale(.94)
-        rotate(30deg);
-    }
-
-    .refresh.loading {
-      animation:
-        spin 1s linear infinite;
-    }
-
-    /* =========================
-       SECTION HEADER
-    ========================= */
+    /* SECTION */
 
     .section-header {
+
       display: flex;
 
       justify-content: space-between;
+
       align-items: center;
 
       margin-bottom: 15px;
 
-      animation:
-        fadeUp .7s .15s ease both;
     }
 
     .section-title {
+
       font-size: 15px;
+
       font-weight: 600;
+
     }
 
     .project-count {
-      color: var(--muted-2);
+
+      color:
+        var(--muted-2);
 
       font-size: 12px;
+
     }
 
-    /* =========================
-       PROJECT GRID
-    ========================= */
+    /* GRID */
 
     .projects {
+
       display: grid;
 
       grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+        repeat(2,minmax(0,1fr));
 
       gap: 13px;
+
     }
 
-    /* =========================
-       PROJECT CARD
-    ========================= */
+    /* CARD */
 
     .project {
+
       position: relative;
 
       display: flex;
@@ -440,37 +476,18 @@
       overflow: hidden;
 
       transition:
-        transform .25s ease,
-        border-color .25s ease,
-        background .25s ease,
-        box-shadow .25s ease;
+        transform .25s,
+        border-color .25s,
+        background .25s,
+        box-shadow .25s;
 
       animation:
         fadeUp .45s ease both;
-    }
 
-    .project::before {
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      background:
-        radial-gradient(
-          circle at 0% 0%,
-          rgba(255,255,255,.09),
-          transparent 38%
-        );
-
-      opacity: 0;
-
-      transition: .3s;
-
-      pointer-events: none;
     }
 
     .project:hover {
+
       transform:
         translateY(-4px);
 
@@ -485,25 +502,21 @@
         );
 
       box-shadow:
-        0 18px 45px rgba(0,0,0,.35);
-    }
+        0 18px 45px
+        rgba(0,0,0,.35);
 
-    .project:hover::before {
-      opacity: 1;
     }
 
     .project:active {
+
       transform:
         scale(.98);
+
     }
 
-    /* =========================
-       NUMBER
-    ========================= */
+    /* NUMBER */
 
     .number {
-      position: relative;
-      z-index: 1;
 
       width: 45px;
       height: 45px;
@@ -511,10 +524,12 @@
       flex-shrink: 0;
 
       display: grid;
+
       place-items: center;
 
       border:
-        1px solid rgba(255,255,255,.07);
+        1px solid
+        rgba(255,255,255,.07);
 
       border-radius: 14px;
 
@@ -524,78 +539,96 @@
       color: #999;
 
       font-size: 11px;
+
       font-weight: 600;
+
     }
 
-    /* =========================
-       INFO
-    ========================= */
+    /* INFO */
 
     .info {
-      position: relative;
-      z-index: 1;
 
       min-width: 0;
 
       flex: 1;
+
     }
 
     .name {
+
       overflow: hidden;
 
       color: white;
 
       font-size: 14px;
+
       font-weight: 600;
 
       white-space: nowrap;
 
       text-overflow: ellipsis;
+
     }
 
-    .path {
-      margin-top: 6px;
+    .description {
+
+      margin-top: 5px;
 
       overflow: hidden;
 
-      color: #62626a;
+      color: #707078;
 
-      font-family: monospace;
-
-      font-size: 10px;
+      font-size: 11px;
 
       white-space: nowrap;
 
       text-overflow: ellipsis;
+
     }
 
-    /* =========================
-       ARROW
-    ========================= */
+    .path {
+
+      margin-top: 5px;
+
+      overflow: hidden;
+
+      color: #4f4f56;
+
+      font-family: monospace;
+
+      font-size: 9px;
+
+      white-space: nowrap;
+
+      text-overflow: ellipsis;
+
+    }
+
+    /* ARROW */
 
     .arrow {
-      position: relative;
-      z-index: 1;
 
       color: #606068;
 
       font-size: 20px;
 
       transition: .25s;
+
     }
 
     .project:hover .arrow {
+
       color: white;
 
       transform:
         translateX(4px);
+
     }
 
-    /* =========================
-       LOADING
-    ========================= */
+    /* LOADING */
 
     .loading {
+
       grid-column:
         1 / -1;
 
@@ -606,9 +639,11 @@
       color: #666;
 
       font-size: 13px;
+
     }
 
     .loader {
+
       width: 28px;
       height: 28px;
 
@@ -616,22 +651,22 @@
         0 auto 15px;
 
       border:
-        2px solid rgba(255,255,255,.1);
+        2px solid
+        rgba(255,255,255,.1);
 
-      border-top-color:
-        white;
+      border-top-color: white;
 
       border-radius: 50%;
 
       animation:
         spin .8s linear infinite;
+
     }
 
-    /* =========================
-       EMPTY
-    ========================= */
+    /* EMPTY */
 
     .empty {
+
       grid-column:
         1 / -1;
 
@@ -642,21 +677,23 @@
       color: #666;
 
       font-size: 13px;
+
     }
 
     .empty-icon {
+
       margin-bottom: 12px;
 
       font-size: 30px;
 
       opacity: .5;
+
     }
 
-    /* =========================
-       ERROR
-    ========================= */
+    /* ERROR */
 
     .error {
+
       grid-column:
         1 / -1;
 
@@ -665,7 +702,8 @@
       text-align: center;
 
       border:
-        1px solid rgba(255,80,80,.12);
+        1px solid
+        rgba(255,80,80,.12);
 
       border-radius: 18px;
 
@@ -675,17 +713,21 @@
       color: #a87878;
 
       font-size: 13px;
+
     }
 
     .error strong {
+
       display: block;
 
       margin-bottom: 7px;
 
       color: #d09090;
+
     }
 
     .retry {
+
       margin-top: 15px;
 
       padding:
@@ -702,17 +744,13 @@
       color: #aaa;
 
       cursor: pointer;
+
     }
 
-    .retry:hover {
-      color: white;
-    }
-
-    /* =========================
-       FOOTER
-    ========================= */
+    /* FOOTER */
 
     footer {
+
       margin-top: 50px;
 
       text-align: center;
@@ -720,30 +758,33 @@
       color: #414148;
 
       font-size: 11px;
+
     }
 
     footer span {
       color: #5b5b63;
     }
 
-    /* =========================
-       ANIMATION
-    ========================= */
+    /* ANIMATION */
 
     @keyframes fadeUp {
 
       from {
+
         opacity: 0;
 
         transform:
           translateY(14px);
+
       }
 
       to {
+
         opacity: 1;
 
         transform:
           translateY(0);
+
       }
 
     }
@@ -751,21 +792,23 @@
     @keyframes spin {
 
       to {
+
         transform:
           rotate(360deg);
+
       }
 
     }
 
-    /* =========================
-       RESPONSIVE
-    ========================= */
+    /* RESPONSIVE */
 
     @media (min-width: 900px) {
 
       .projects {
+
         grid-template-columns:
-          repeat(3, minmax(0, 1fr));
+          repeat(3,minmax(0,1fr));
+
       }
 
     }
@@ -773,25 +816,23 @@
     @media (max-width: 600px) {
 
       .container {
+
         padding:
           28px 14px 40px;
-      }
 
-      .tools {
-        gap: 8px;
       }
 
       .projects {
-        grid-template-columns:
-          1fr;
+
+        grid-template-columns: 1fr;
+
       }
 
       h1 {
-        letter-spacing: -1.5px;
-      }
 
-      .project {
-        min-height: 84px;
+        letter-spacing:
+          -1.5px;
+
       }
 
     }
@@ -800,9 +841,12 @@
 
 </head>
 
+
 <body>
 
+
   <main class="container">
+
 
     <!-- HEADER -->
 
@@ -818,21 +862,21 @@
 
       <p class="subtitle">
         Semua project web dalam satu tempat.
-        Daftar project diperbarui otomatis dari GitHub.
+        Daftar project dikelola melalui projects.json.
       </p>
 
       <div class="status">
 
         <span class="status-dot"></span>
 
-        GitHub Connected
+        Project Database Online
 
       </div>
 
     </header>
 
 
-    <!-- SEARCH + REFRESH -->
+    <!-- SEARCH -->
 
     <div class="tools">
 
@@ -851,11 +895,11 @@
 
       </div>
 
+
       <button
         id="refresh"
         class="refresh"
-        type="button"
-        title="Refresh project"
+        title="Refresh"
       >
         ↻
       </button>
@@ -892,7 +936,7 @@
 
         <div class="loader"></div>
 
-        Mengambil project dari GitHub...
+        Memuat projects.json...
 
       </div>
 
@@ -906,168 +950,85 @@
       Tama Technology
       <span>·</span>
       Project Hub
-      <span>·</span>
-      GitHub
 
     </footer>
+
 
   </main>
 
 
   <script>
 
-    /* =====================================================
-       GITHUB CONFIGURATION
-       =====================================================
+    /* =========================================
+       CONFIG
+    ========================================= */
 
-       GANTI 2 BAGIAN INI
-
-       GITHUB_OWNER
-       = username GitHub kamu
-
-       GITHUB_REPO
-       = nama repository kamu
-
-       Contoh:
-
-       const GITHUB_OWNER = "tama-technology17";
-       const GITHUB_REPO = "TamaProjects";
-
-    ===================================================== */
+    const PROJECT_FILE =
+      "./projects.json";
 
 
-    const GITHUB_OWNER =
-      "tama-technology17";
-
-    const GITHUB_REPO =
-      "TamaMusic";
-
-
-    /*
-       Branch yang digunakan.
-
-       Biasanya:
-       main
-
-       Kalau repository kamu memakai master,
-       ubah menjadi:
-
-       "master"
-    */
-
-    const GITHUB_BRANCH =
-      "main";
-
-
-    /*
-       Folder root tempat project berada.
-
-       Kalau project langsung di root:
-
-       ""
-
-       Kalau project berada di folder:
-
-       "projects"
-    */
-
-    const PROJECT_ROOT =
-      "";
-
-
-    /* =====================================================
+    /* =========================================
        ELEMENTS
-    ===================================================== */
+    ========================================= */
 
     const projectContainer =
-      document.getElementById("projects");
-
-    const searchInput =
-      document.getElementById("search");
-
-    const countElement =
-      document.getElementById("count");
-
-    const refreshButton =
-      document.getElementById("refresh");
-
-
-    /* =====================================================
-       STATE
-    ===================================================== */
-
-    let allProjects = [];
-
-
-    /* =====================================================
-       GITHUB API
-    ===================================================== */
-
-    function getApiUrl() {
-
-      const path =
-        PROJECT_ROOT
-          ? `/${PROJECT_ROOT}`
-          : "";
-
-      return (
-        `https://api.github.com/repos/` +
-        `${encodeURIComponent(GITHUB_OWNER)}/` +
-        `${encodeURIComponent(GITHUB_REPO)}` +
-        `/contents${path}` +
-        `?ref=${encodeURIComponent(GITHUB_BRANCH)}`
+      document.getElementById(
+        "projects"
       );
 
-    }
+    const searchInput =
+      document.getElementById(
+        "search"
+      );
+
+    const countElement =
+      document.getElementById(
+        "count"
+      );
+
+    const refreshButton =
+      document.getElementById(
+        "refresh"
+      );
 
 
-    /* =====================================================
-       LOAD PROJECTS
-    ===================================================== */
+    /* =========================================
+       STATE
+    ========================================= */
+
+    let projects = [];
+
+
+    /* =========================================
+       LOAD JSON
+    ========================================= */
 
     async function loadProjects() {
 
       setLoading(true);
 
+
       try {
 
-        validateConfig();
+        /*
+          Cache busting.
+
+          Browser tetap mengambil
+          projects.json terbaru.
+        */
+
+        const url =
+          `${PROJECT_FILE}?t=${Date.now()}`;
+
 
         const response =
-          await fetch(
-            getApiUrl(),
-            {
-              headers: {
-                "Accept":
-                  "application/vnd.github+json"
-              },
-
-              cache: "no-store"
-            }
-          );
+          await fetch(url);
 
 
         if (!response.ok) {
 
-          if (response.status === 404) {
-
-            throw new Error(
-              "Repository atau branch tidak ditemukan."
-            );
-
-          }
-
-          if (response.status === 403) {
-
-            throw new Error(
-              "GitHub API rate limit tercapai. " +
-              "Coba lagi beberapa saat."
-            );
-
-          }
-
           throw new Error(
-            `GitHub API error: ${response.status}`
+            `projects.json tidak ditemukan (${response.status})`
           );
 
         }
@@ -1077,108 +1038,37 @@
           await response.json();
 
 
-        if (!Array.isArray(data)) {
+        if (
+          !data ||
+          !Array.isArray(
+            data.projects
+          )
+        ) {
 
           throw new Error(
-            "Response GitHub tidak valid."
+            "Format projects.json tidak valid."
           );
 
         }
 
 
-        /*
-          GitHub Contents API memberikan:
-
-          file
-          directory
-
-          Kita hanya mengambil directory.
-        */
-
-        const directories =
-          data.filter(
-            item =>
-              item.type === "dir"
-          );
-
-
-        /*
-          Untuk memastikan folder benar-benar
-          merupakan project, kita cek apakah
-          folder tersebut mempunyai index.html.
-        */
-
-        const checkedProjects =
-          await Promise.all(
-
-            directories.map(
-              async folder => {
-
-                const valid =
-                  await hasIndexHtml(
-                    folder.path
-                  );
-
-                if (!valid) {
-                  return null;
-                }
-
-
-                return {
-
-                  name:
-                    folder.name,
-
-                  path:
-                    folder.path,
-
-                  url:
-                    createProjectUrl(
-                      folder.path
-                    ),
-
-                  githubUrl:
-                    folder.html_url
-
-                };
-
-              }
-            )
-
-          );
-
-
-        allProjects =
-          checkedProjects
-            .filter(Boolean)
-            .sort(
-              (a, b) =>
-                a.name.localeCompare(
-                  b.name,
-                  undefined,
-                  {
-                    numeric: true,
-                    sensitivity: "base"
-                  }
-                )
-            );
+        projects =
+          data.projects;
 
 
         renderProjects(
-          allProjects
+          projects
         );
 
 
       } catch (error) {
 
-        console.error(
-          "Project Hub Error:",
-          error
-        );
+        console.error(error);
 
         showError(
           error.message
         );
+
 
       } finally {
 
@@ -1189,92 +1079,19 @@
     }
 
 
-    /* =====================================================
-       CHECK INDEX.HTML
-    ===================================================== */
-
-    async function hasIndexHtml(
-      folderPath
-    ) {
-
-      const url =
-        `https://api.github.com/repos/` +
-        `${encodeURIComponent(GITHUB_OWNER)}/` +
-        `${encodeURIComponent(GITHUB_REPO)}` +
-        `/contents/` +
-        `${folderPath}/index.html` +
-        `?ref=${encodeURIComponent(GITHUB_BRANCH)}`;
-
-
-      try {
-
-        const response =
-          await fetch(
-            url,
-            {
-              headers: {
-                "Accept":
-                  "application/vnd.github+json"
-              },
-
-              cache: "no-store"
-            }
-          );
-
-
-        return response.ok;
-
-      } catch {
-
-        return false;
-
-      }
-
-    }
-
-
-    /* =====================================================
-       CREATE PROJECT URL
-    ===================================================== */
-
-    function createProjectUrl(
-      folderPath
-    ) {
-
-      /*
-        Karena Vercel akan melayani folder
-        sebagai static directory:
-
-        /folder-name/
-      */
-
-      const encodedPath =
-        folderPath
-          .split("/")
-          .map(
-            part =>
-              encodeURIComponent(part)
-          )
-          .join("/");
-
-
-      return `/${encodedPath}/`;
-
-    }
-
-
-    /* =====================================================
-       RENDER
-    ===================================================== */
+    /* =========================================
+       RENDER PROJECTS
+    ========================================= */
 
     function renderProjects(
-      projects
+      list
     ) {
 
-      if (!projects.length) {
+      if (!list.length) {
 
         countElement.textContent =
           "0 projects";
+
 
         projectContainer.innerHTML = `
 
@@ -1284,7 +1101,7 @@
               📂
             </div>
 
-            Belum ada project yang ditemukan.
+            Belum ada project.
 
           </div>
 
@@ -1296,19 +1113,20 @@
 
 
       countElement.textContent =
-        `${projects.length} project` +
+        `${list.length} project` +
         (
-          projects.length !== 1
+          list.length !== 1
             ? "s"
             : ""
         );
 
 
       projectContainer.innerHTML =
-        projects
+
+        list
           .map(
-            (project, index) =>
-              createCard(
+            (project,index) =>
+              createProjectCard(
                 project,
                 index
               )
@@ -1318,34 +1136,46 @@
     }
 
 
-    /* =====================================================
-       CREATE CARD
-    ===================================================== */
+    /* =========================================
+       PROJECT CARD
+    ========================================= */
 
-    function createCard(
+    function createProjectCard(
       project,
       index
     ) {
 
       const number =
         String(index + 1)
-          .padStart(2, "0");
+          .padStart(2,"0");
 
 
       const title =
-        formatProjectName(
+        project.title ||
+        formatName(
           project.name
         );
+
+
+      const description =
+        project.description ||
+        "Web Project";
+
+
+      const url =
+        project.url ||
+        `/${project.name}/`;
 
 
       return `
 
         <a
           class="project"
-          href="${escapeHTML(
-            project.url
-          )}"
-          style="animation-delay:${index * 35}ms"
+          href="${escapeHTML(url)}"
+          style="
+            animation-delay:
+            ${index * 35}ms
+          "
         >
 
           <div class="number">
@@ -1364,10 +1194,19 @@
             </div>
 
 
+            <div class="description">
+
+              ${escapeHTML(
+                description
+              )}
+
+            </div>
+
+
             <div class="path">
 
               /${escapeHTML(
-                project.path
+                project.name
               )}/
 
             </div>
@@ -1388,16 +1227,16 @@
     }
 
 
-    /* =====================================================
+    /* =========================================
        SEARCH
-    ===================================================== */
+    ========================================= */
 
     searchInput.addEventListener(
       "input",
-      () => {
+      function() {
 
         const keyword =
-          searchInput.value
+          this.value
             .trim()
             .toLowerCase();
 
@@ -1405,7 +1244,7 @@
         if (!keyword) {
 
           renderProjects(
-            allProjects
+            projects
           );
 
           return;
@@ -1414,22 +1253,48 @@
 
 
         const filtered =
-          allProjects.filter(
+          projects.filter(
             project => {
 
               const name =
-                project.name
+                (
+                  project.name || ""
+                )
                   .toLowerCase();
 
+
               const title =
-                formatProjectName(
-                  project.name
-                ).toLowerCase();
+                (
+                  project.title || ""
+                )
+                  .toLowerCase();
+
+
+              const description =
+                (
+                  project.description || ""
+                )
+                  .toLowerCase();
 
 
               return (
-                name.includes(keyword) ||
-                title.includes(keyword)
+
+                name.includes(
+                  keyword
+                )
+
+                ||
+
+                title.includes(
+                  keyword
+                )
+
+                ||
+
+                description.includes(
+                  keyword
+                )
+
               );
 
             }
@@ -1444,56 +1309,58 @@
     );
 
 
-    /* =====================================================
+    /* =========================================
        REFRESH
-    ===================================================== */
+    ========================================= */
 
     refreshButton.addEventListener(
       "click",
-      () => {
-
-        loadProjects();
-
-      }
+      loadProjects
     );
 
 
-    /* =====================================================
+    /* =========================================
        LOADING
-    ===================================================== */
+    ========================================= */
 
     function setLoading(
       loading
     ) {
 
-      refreshButton.classList.toggle(
-        "loading",
-        loading
+      if (!loading) {
+
+        refreshButton.classList.remove(
+          "loading"
+        );
+
+        return;
+
+      }
+
+
+      refreshButton.classList.add(
+        "loading"
       );
 
 
-      if (loading) {
+      projectContainer.innerHTML = `
 
-        projectContainer.innerHTML = `
+        <div class="loading">
 
-          <div class="loading">
+          <div class="loader"></div>
 
-            <div class="loader"></div>
+          Memuat projects.json...
 
-            Mengambil project dari GitHub...
+        </div>
 
-          </div>
-
-        `;
-
-      }
+      `;
 
     }
 
 
-    /* =====================================================
+    /* =========================================
        ERROR
-    ===================================================== */
+    ========================================= */
 
     function showError(
       message
@@ -1508,7 +1375,7 @@
         <div class="error">
 
           <strong>
-            Gagal mengambil project
+            Gagal memuat project
           </strong>
 
           ${escapeHTML(message)}
@@ -1529,15 +1396,15 @@
     }
 
 
-    /* =====================================================
+    /* =========================================
        FORMAT NAME
-    ===================================================== */
+    ========================================= */
 
-    function formatProjectName(
+    function formatName(
       name
     ) {
 
-      return name
+      return String(name)
 
         .replace(
           /[-_]+/g,
@@ -1565,9 +1432,9 @@
     }
 
 
-    /* =====================================================
+    /* =========================================
        ESCAPE HTML
-    ===================================================== */
+    ========================================= */
 
     function escapeHTML(
       value
@@ -1603,45 +1470,14 @@
     }
 
 
-    /* =====================================================
-       VALIDATE CONFIG
-    ===================================================== */
-
-    function validateConfig() {
-
-      if (
-        GITHUB_OWNER ===
-        "USERNAME_GITHUB_KAMU"
-      ) {
-
-        throw new Error(
-          "Ganti GITHUB_OWNER dengan username GitHub kamu."
-        );
-
-      }
-
-
-      if (
-        GITHUB_REPO ===
-        "NAMA_REPOSITORY_KAMU"
-      ) {
-
-        throw new Error(
-          "Ganti GITHUB_REPO dengan nama repository kamu."
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
+    /* =========================================
        START
-    ===================================================== */
+    ========================================= */
 
     loadProjects();
 
   </script>
+
 
 </body>
 

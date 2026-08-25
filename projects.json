@@ -1,0 +1,70 @@
+{
+  "projects": [
+    {
+      "name": "astagabercanda",
+      "title": "Astaga Bercanda",
+      "description": "Astaga Bercanda project",
+      "url": "/astagabercanda/"
+    },
+    {
+      "name": "dropdead",
+      "title": "Drop Dead",
+      "description": "Drop Dead project",
+      "url": "/dropdead/"
+    },
+    {
+      "name": "fotokitablur",
+      "title": "Foto Kita Blur",
+      "description": "Foto Kita Blur project",
+      "url": "/fotokitablur/"
+    },
+    {
+      "name": "lovemenot",
+      "title": "Love Me Not",
+      "description": "Love Me Not project",
+      "url": "/lovemenot/"
+    },
+    {
+      "name": "onemorenight",
+      "title": "One More Night",
+      "description": "One More Night project",
+      "url": "/onemorenight/"
+    },
+    {
+      "name": "sesipotret",
+      "title": "Sesi Potret",
+      "description": "Sesi Potret project",
+      "url": "/sesipotret/"
+    },
+    {
+      "name": "shapeofmyheart",
+      "title": "Shape Of My Heart",
+      "description": "Shape Of My Heart project",
+      "url": "/shapeofmyheart/"
+    },
+    {
+      "name": "tehhijau",
+      "title": "Teh Hijau",
+      "description": "Teh Hijau project",
+      "url": "/tehhijau/"
+    },
+    {
+      "name": "tamaAi",
+      "title": "tamaAi",
+      "description": "Ai for music",
+      "url": "/tamamusic"
+    },
+    {
+      "name": "theonethatgotaway",
+      "title": "The One That Got Away",
+      "description": "The One That Got Away project",
+      "url": "/theonethatgotaway/"
+    },
+    {
+      "name": "thefateofophelia",
+      "title": "thefateofophelia",
+      "description": "thefateofophelia",
+      "url": "/thefateofophelia/"
+    }
+  ]
+}

@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Project Manager</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#070709;
+  --panel:#101014;
+  --panel2:#151519;
+  --border:rgba(255,255,255,.09);
+  --border-hover:rgba(255,255,255,.2);
+  --text:#fff;
+  --muted:#888891;
+  --green:#45e98a;
+  --red:#ff6464;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(120,90,255,.18),
+      transparent 35%
+    ),
+    var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.container{
+  width:min(1050px,100%);
+  margin:auto;
+  padding:30px 16px 60px;
+}
+
+/* HEADER */
+
+header{
+  margin-bottom:28px;
+}
+
+.logo{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:linear-gradient(
+    135deg,
+    #fff,
+    #aaa
+  );
+  color:#000;
+  font-weight:800;
+  margin-bottom:16px;
+}
+
+h1{
+  font-size:
+    clamp(28px,7vw,45px);
+  letter-spacing:-1.8px;
+}
+
+.subtitle{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* LAYOUT */
+
+.layout{
+  display:grid;
+  grid-template-columns:360px 1fr;
+  gap:18px;
+}
+
+/* PANEL */
+
+.panel{
+  background:
+    rgba(255,255,255,.035);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:20px;
+  backdrop-filter:blur(15px);
+}
+
+.panel-title{
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+
+/* FORM */
+
+.field{
+  margin-bottom:14px;
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  color:#aaa;
+  font-size:11px;
+}
+
+input,
+textarea{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:12px;
+  outline:none;
+  background:
+    rgba(255,255,255,.045);
+  color:#fff;
+  padding:12px 13px;
+  font:inherit;
+  font-size:13px;
+  transition:.2s;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+input:focus,
+textarea:focus{
+  border-color:
+    var(--border-hover);
+  background:
+    rgba(255,255,255,.07);
+}
+
+/* BUTTONS */
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:18px;
+}
+
+button{
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:
+    rgba(255,255,255,.05);
+  color:#fff;
+  padding:11px;
+  cursor:pointer;
+  font:inherit;
+  font-size:12px;
+  transition:.2s;
+}
+
+button:hover{
+  border-color:
+    var(--border-hover);
+  background:
+    rgba(255,255,255,.09);
+}
+
+.primary{
+  background:#fff;
+  color:#000;
+  border-color:#fff;
+}
+
+.primary:hover{
+  background:#ddd;
+}
+
+.danger{
+  color:var(--red);
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+/* PREVIEW */
+
+.preview{
+  margin-top:20px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+}
+
+.preview-title{
+  color:#666;
+  font-size:10px;
+  margin-bottom:10px;
+}
+
+.card-preview{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:
+    rgba(255,255,255,.035);
+}
+
+.preview-number{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:
+    rgba(255,255,255,.07);
+  color:#888;
+  font-size:11px;
+}
+
+.preview-info{
+  min-width:0;
+}
+
+.preview-name{
+  font-size:13px;
+  font-weight:600;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.preview-desc{
+  margin-top:4px;
+  color:#666;
+  font-size:10px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* PROJECT LIST */
+
+.list-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.count{
+  color:#666;
+  font-size:11px;
+}
+
+.projects{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.project{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:
+    rgba(255,255,255,.03);
+  transition:.2s;
+}
+
+.project:hover{
+  border-color:
+    var(--border-hover);
+  background:
+    rgba(255,255,255,.055);
+}
+
+.project-number{
+  width:36px;
+  height:36px;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:
+    rgba(255,255,255,.06);
+  color:#777;
+  font-size:10px;
+}
+
+.project-info{
+  flex:1;
+  min-width:0;
+}
+
+.project-name{
+  font-size:13px;
+  font-weight:600;
+}
+
+.project-path{
+  margin-top:4px;
+  color:#555;
+  font-family:monospace;
+  font-size:9px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.project-actions{
+  display:flex;
+  gap:5px;
+}
+
+.small-btn{
+  width:34px;
+  height:34px;
+  padding:0;
+  display:grid;
+  place-items:center;
+}
+
+/* IMPORT EXPORT */
+
+.actions{
+  display:grid;
+  grid-template-columns:
+    repeat(3,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+
+.file-input{
+  display:none;
+}
+
+/* EMPTY */
+
+.empty{
+  padding:50px 20px;
+  text-align:center;
+  color:#555;
+  font-size:12px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:
+    translate(-50%,20px);
+  padding:12px 17px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#151519;
+  color:#fff;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:100;
+}
+
+.toast.show{
+  opacity:1;
+  transform:
+    translate(-50%,0);
+}
+
+/* MOBILE */
+
+@media(max-width:750px){
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .actions{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:450px){
+
+  .container{
+    padding:
+      22px 12px 45px;
+  }
+
+  .buttons{
+    grid-template-columns:1fr;
+  }
+
+  .actions{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+  <div class="logo">
+    T
+  </div>
+
+  <h1>
+    Project Manager
+  </h1>
+
+  <p class="subtitle">
+    Kelola daftar project yang tersimpan di projects.json
+  </p>
+
+</header>
+
+
+<div class="layout">
+
+<!-- =========================
+     FORM
+========================= -->
+
+<section class="panel">
+
+  <div class="panel-title">
+    Tambah Project
+  </div>
+
+
+  <form id="projectForm">
+
+    <div class="field">
+
+      <label>
+        Project Name
+      </label>
+
+      <input
+        id="name"
+        required
+        placeholder="contoh: qrscanner"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Project Title
+      </label>
+
+      <input
+        id="title"
+        required
+        placeholder="QR Scanner"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        Description
+      </label>
+
+      <textarea
+        id="description"
+        placeholder="Deskripsi project..."
+      ></textarea>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>
+        URL
+      </label>
+
+      <input
+        id="url"
+        required
+        placeholder="/qrscanner/"
+      >
+
+    </div>
+
+
+    <div class="buttons">
+
+      <button
+        type="submit"
+        class="primary"
+        id="submitButton"
+      >
+        + Tambahkan Project
+      </button>
+
+      <button
+        type="button"
+        id="cancelButton"
+      >
+        Batal
+      </button>
+
+    </div>
+
+  </form>
+
+
+  <!-- PREVIEW -->
+
+  <div class="preview">
+
+    <div class="preview-title">
+      PREVIEW
+    </div>
+
+    <div class="card-preview">
+
+      <div
+        class="preview-number"
+        id="previewNumber"
+      >
+        01
+      </div>
+
+      <div class="preview-info">
+
+        <div
+          class="preview-name"
+          id="previewName"
+        >
+          Project Name
+        </div>
+
+        <div
+          class="preview-desc"
+          id="previewDesc"
+        >
+          Description
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     PROJECT LIST
+========================= -->
+
+<section class="panel">
+
+  <div class="list-header">
+
+    <div class="panel-title">
+      Daftar Project
+    </div>
+
+    <div
+      class="count"
+      id="count"
+    >
+      0 project
+    </div>
+
+  </div>
+
+
+  <div
+    class="projects"
+    id="projects"
+  >
+
+    <div class="empty">
+      Belum ada project.
+    </div>
+
+  </div>
+
+
+  <!-- IMPORT / EXPORT -->
+
+  <div class="actions">
+
+    <button
+      id="importButton"
+    >
+      Import JSON
+    </button>
+
+    <button
+      id="copyButton"
+    >
+      Copy JSON
+    </button>
+
+    <button
+      id="downloadButton"
+      class="primary"
+    >
+      Download JSON
+    </button>
+
+  </div>
+
+
+  <input
+    type="file"
+    id="fileInput"
+    class="file-input"
+    accept=".json,application/json"
+  >
+
+</section>
+
+</div>
+
+</div>
+
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+<script>
+
+/* =========================================
+   STATE
+========================================= */
+
+let projects = [];
+
+let editIndex = -1;
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const form =
+  document.getElementById(
+    "projectForm"
+  );
+
+const nameInput =
+  document.getElementById(
+    "name"
+  );
+
+const titleInput =
+  document.getElementById(
+    "title"
+  );
+
+const descriptionInput =
+  document.getElementById(
+    "description"
+  );
+
+const urlInput =
+  document.getElementById(
+    "url"
+  );
+
+const submitButton =
+  document.getElementById(
+    "submitButton"
+  );
+
+const cancelButton =
+  document.getElementById(
+    "cancelButton"
+  );
+
+const projectsContainer =
+  document.getElementById(
+    "projects"
+  );
+
+const countElement =
+  document.getElementById(
+    "count"
+  );
+
+const importButton =
+  document.getElementById(
+    "importButton"
+  );
+
+const copyButton =
+  document.getElementById(
+    "copyButton"
+  );
+
+const downloadButton =
+  document.getElementById(
+    "downloadButton"
+  );
+
+const fileInput =
+  document.getElementById(
+    "fileInput"
+  );
+
+const previewName =
+  document.getElementById(
+    "previewName"
+  );
+
+const previewDesc =
+  document.getElementById(
+    "previewDesc"
+  );
+
+const previewNumber =
+  document.getElementById(
+    "previewNumber"
+  );
+
+
+/* =========================================
+   LOAD EXISTING JSON
+========================================= */
+
+async function loadExisting(){
+
+  try{
+
+    const response =
+      await fetch(
+        `./projects.json?t=${Date.now()}`
+      );
+
+    if(!response.ok){
+      throw new Error();
+    }
+
+    const data =
+      await response.json();
+
+    if(
+      data &&
+      Array.isArray(data.projects)
+    ){
+
+      projects =
+        data.projects;
+
+    }
+
+  }catch{
+
+    /*
+      Kalau projects.json belum ada,
+      mulai dengan array kosong.
+    */
+
+    projects = [];
+
+  }
+
+  render();
+
+}
+
+
+/* =========================================
+   FORM SUBMIT
+========================================= */
+
+form.addEventListener(
+  "submit",
+  function(event){
+
+    event.preventDefault();
+
+
+    const project = {
+
+      name:
+        nameInput.value
+          .trim(),
+
+      title:
+        titleInput.value
+          .trim(),
+
+      description:
+        descriptionInput.value
+          .trim(),
+
+      url:
+        urlInput.value
+          .trim()
+
+    };
+
+
+    if(
+      !project.name ||
+      !project.title ||
+      !project.url
+    ){
+
+      showToast(
+        "Lengkapi data project."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      Cek duplicate
+    */
+
+    const duplicate =
+      projects.some(
+        (item,index) =>
+
+          index !== editIndex &&
+
+          item.name.toLowerCase() ===
+          project.name.toLowerCase()
+
+      );
+
+
+    if(duplicate){
+
+      showToast(
+        "Project dengan nama tersebut sudah ada."
+      );
+
+      return;
+
+    }
+
+
+    if(editIndex === -1){
+
+      projects.push(
+        project
+      );
+
+      showToast(
+        "Project berhasil ditambahkan."
+      );
+
+    }else{
+
+      projects[editIndex] =
+        project;
+
+      showToast(
+        "Project berhasil diperbarui."
+      );
+
+    }
+
+
+    resetForm();
+
+    render();
+
+  }
+);
+
+
+/* =========================================
+   EDIT
+========================================= */
+
+function editProject(index){
+
+  const project =
+    projects[index];
+
+  nameInput.value =
+    project.name || "";
+
+  titleInput.value =
+    project.title || "";
+
+  descriptionInput.value =
+    project.description || "";
+
+  urlInput.value =
+    project.url || "";
+
+
+  editIndex = index;
+
+
+  submitButton.textContent =
+    "Simpan Perubahan";
+
+
+  document
+    .querySelector(".panel")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+
+  updatePreview();
+
+}
+
+
+/* =========================================
+   DELETE
+========================================= */
+
+function deleteProject(index){
+
+  const project =
+    projects[index];
+
+
+  const confirmDelete =
+    confirm(
+      `Hapus project "${project.title || project.name}"?`
+    );
+
+
+  if(!confirmDelete){
+    return;
+  }
+
+
+  projects.splice(
+    index,
+    1
+  );
+
+
+  render();
+
+  showToast(
+    "Project dihapus."
+  );
+
+}
+
+
+/* =========================================
+   RESET
+========================================= */
+
+function resetForm(){
+
+  form.reset();
+
+  editIndex = -1;
+
+  submitButton.textContent =
+    "+ Tambahkan Project";
+
+  updatePreview();
+
+}
+
+
+/* =========================================
+   CANCEL
+========================================= */
+
+cancelButton.addEventListener(
+  "click",
+  resetForm
+);
+
+
+/* =========================================
+   LIVE PREVIEW
+========================================= */
+
+[
+  nameInput,
+  titleInput,
+  descriptionInput
+].forEach(
+  input => {
+
+    input.addEventListener(
+      "input",
+      updatePreview
+    );
+
+  }
+);
+
+
+function updatePreview(){
+
+  const name =
+    titleInput.value.trim() ||
+    nameInput.value.trim() ||
+    "Project Name";
+
+
+  const description =
+    descriptionInput.value.trim() ||
+    "Description";
+
+
+  previewName.textContent =
+    name;
+
+
+  previewDesc.textContent =
+    description;
+
+
+  previewNumber.textContent =
+    String(
+      editIndex >= 0
+        ? editIndex + 1
+        : projects.length + 1
+    )
+      .padStart(2,"0");
+
+}
+
+
+/* =========================================
+   AUTO URL
+========================================= */
+
+nameInput.addEventListener(
+  "input",
+  function(){
+
+    /*
+      Hanya otomatis mengisi URL
+      jika URL masih kosong.
+    */
+
+    if(!urlInput.value){
+
+      const slug =
+        this.value
+          .trim()
+          .toLowerCase()
+          .replace(
+            /[^a-z0-9]+/g,
+            ""
+          );
+
+      if(slug){
+
+        urlInput.value =
+          `/${slug}/`;
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   RENDER
+========================================= */
+
+function render(){
+
+  countElement.textContent =
+    `${projects.length} project` +
+    (
+      projects.length !== 1
+        ? "s"
+        : ""
+    );
+
+
+  if(!projects.length){
+
+    projectsContainer.innerHTML = `
+
+      <div class="empty">
+        Belum ada project.
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  projectsContainer.innerHTML =
+
+    projects
+      .map(
+        (project,index) => `
+
+          <div class="project">
+
+            <div class="project-number">
+
+              ${String(index + 1)
+                .padStart(2,"0")}
+
+            </div>
+
+
+            <div class="project-info">
+
+              <div class="project-name">
+
+                ${escapeHTML(
+                  project.title ||
+                  project.name
+                )}
+
+              </div>
+
+
+              <div class="project-path">
+
+                ${escapeHTML(
+                  project.url ||
+                  `/${project.name}/`
+                )}
+
+              </div>
+
+            </div>
+
+
+            <div class="project-actions">
+
+              <button
+                class="small-btn"
+                onclick="editProject(${index})"
+                title="Edit"
+              >
+                ✎
+              </button>
+
+
+              <button
+                class="small-btn danger"
+                onclick="deleteProject(${index})"
+                title="Hapus"
+              >
+                ×
+              </button>
+
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================
+   COPY JSON
+========================================= */
+
+copyButton.addEventListener(
+  "click",
+  async function(){
+
+    const json =
+      generateJSON();
+
+
+    try{
+
+      await navigator.clipboard
+        .writeText(json);
+
+      showToast(
+        "JSON berhasil disalin."
+      );
+
+    }catch{
+
+      showToast(
+        "Gagal menyalin JSON."
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   DOWNLOAD JSON
+========================================= */
+
+downloadButton.addEventListener(
+  "click",
+  function(){
+
+    const json =
+      generateJSON();
+
+
+    const blob =
+      new Blob(
+        [json],
+        {
+          type:
+            "application/json"
+        }
+      );
+
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+
+    link.href =
+      url;
+
+    link.download =
+      "projects.json";
+
+
+    document
+      .body
+      .appendChild(
+        link
+      );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+      url
+    );
+
+
+    showToast(
+      "projects.json berhasil dibuat."
+    );
+
+  }
+);
+
+
+/* =========================================
+   GENERATE JSON
+========================================= */
+
+function generateJSON(){
+
+  return JSON.stringify(
+    {
+      projects:
+        projects
+    },
+    null,
+    2
+  );
+
+}
+
+
+/* =========================================
+   IMPORT JSON
+========================================= */
+
+importButton.addEventListener(
+  "click",
+  () => {
+
+    fileInput.click();
+
+  }
+);
+
+
+fileInput.addEventListener(
+  "change",
+  async function(){
+
+    const file =
+      this.files[0];
+
+    if(!file){
+      return;
+    }
+
+
+    try{
+
+      const text =
+        await file.text();
+
+
+      const data =
+        JSON.parse(text);
+
+
+      if(
+        !data ||
+        !Array.isArray(
+          data.projects
+        )
+      ){
+
+        throw new Error(
+          "Format JSON tidak valid."
+        );
+
+      }
+
+
+      projects =
+        data.projects;
+
+
+      resetForm();
+
+      render();
+
+
+      showToast(
+        `${projects.length} project berhasil diimport.`
+      );
+
+
+    }catch(error){
+
+      showToast(
+        error.message ||
+        "Gagal membaca JSON."
+      );
+
+    }
+
+
+    this.value = "";
+
+  }
+);
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+let toastTimer;
+
+
+function showToast(
+  message
+){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+
+  toast.textContent =
+    message;
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      2200
+    );
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHTML(
+  value
+){
+
+  return String(value)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+loadExisting();
+
+</script>
+
+</body>
+</html>
