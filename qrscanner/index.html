@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08070d">
+<title>ScanLux — QR &amp; Barcode Scanner</title>
+<meta name="description" content="Scan QR Code dan barcode langsung dari kamera atau galeri, cepat dan privat di browser Anda.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%238b5cf6'/%3E%3Cpath d='M6 6h4v4H6zM14 6h4v4h-4zM6 14h4v4H6z' fill='white'/%3E%3Cpath d='M14 14h2v2h-2zM17 14h1v1h-1zM14 17h1v1h-1zM16.5 16.5h1.5v1.5h-1.5z' fill='white'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app" id="app" data-page="scanner">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <h1 class="topbar-title" id="topbarTitle">Scanner</h1>
+    </div>
+    <button type="button" class="icon-btn" id="themeToggleBtn" aria-label="Ganti tema terang/gelap">
+      <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <!-- ===================== MAIN ===================== -->
+  <main class="main">
+
+    <!-- ---------- PAGE: SCANNER ---------- -->
+    <section class="page page-scanner active" id="page-scanner" aria-label="Halaman Scanner">
+      <div class="camera-wrap" id="cameraWrap">
+        <video id="video" class="camera-video" playsinline autoplay muted></video>
+
+        <div class="scan-overlay" id="scanOverlay">
+          <div class="scan-frame" id="scanFrame">
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+            <span class="laser" id="laser"></span>
+          </div>
+          <p class="scan-status" id="scanStatus">Menyiapkan kamera…</p>
+        </div>
+
+        <div class="camera-state" id="cameraState" hidden>
+          <div class="camera-state-icon" id="cameraStateIcon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M21 21H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3m3-3h6l2 3h4a2 2 0 0 1 2 2v9.34m-7.72-2.06a4 4 0 1 1-5.56-5.56"/></svg>
+          </div>
+          <h2 class="camera-state-title" id="cameraStateTitle">Kamera tidak tersedia</h2>
+          <p class="camera-state-text" id="cameraStateText">Terjadi kesalahan saat mengakses kamera.</p>
+          <button type="button" class="btn btn-primary" id="retryCameraBtn">Coba Lagi</button>
+          <p class="camera-state-hint">Anda tetap bisa memindai kode dari galeri.</p>
+        </div>
+
+        <div class="camera-controls">
+          <button type="button" class="ctrl-btn" id="galleryBtn" aria-label="Scan dari galeri">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Galeri</span>
+          </button>
+
+          <button type="button" class="ctrl-btn ctrl-btn-main" id="switchCameraBtn" aria-label="Ganti kamera depan/belakang">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <span>Ganti Kamera</span>
+          </button>
+
+          <button type="button" class="ctrl-btn" id="torchBtn" aria-label="Nyalakan flashlight" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Flash</span>
+          </button>
+        </div>
+
+        <input type="file" id="galleryInput" accept="image/*" hidden>
+      </div>
+    </section>
+
+    <!-- ---------- PAGE: HISTORY ---------- -->
+    <section class="page page-history" id="page-history" aria-label="Halaman Riwayat">
+      <div class="page-inner">
+        <div class="section-row">
+          <h2 class="section-title">Riwayat Pemindaian</h2>
+          <button type="button" class="text-btn text-btn-danger" id="clearHistoryBtn">Hapus Semua</button>
+        </div>
+
+        <div class="history-list" id="historyList"></div>
+
+        <template id="historyIconTpl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="4" y2="20"/><line x1="8" y1="4" x2="8" y2="20"/><line x1="11" y1="4" x2="11" y2="20"/><line x1="15" y1="4" x2="15" y2="20"/><line x1="19" y1="4" x2="19" y2="20"/></svg>
+        </template>
+        <template id="historyDeleteIconTpl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+        </template>
+
+        <div class="empty-state" id="historyEmpty" hidden>
+          <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="12" x2="12" y2="7"/><line x1="12" y1="12" x2="15.5" y2="13.5"/></svg>
+          </div>
+          <h3>Belum ada riwayat</h3>
+          <p>Hasil pemindaian QR code dan barcode Anda akan muncul di sini.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- PAGE: SETTINGS ---------- -->
+    <section class="page page-settings" id="page-settings" aria-label="Halaman Pengaturan">
+      <div class="page-inner">
+        <h2 class="section-title">Pengaturan</h2>
+
+        <div class="settings-group">
+          <div class="settings-item">
+            <div class="settings-item-text">
+              <span class="settings-item-label">Suara Beep</span>
+              <span class="settings-item-desc">Bunyi saat kode berhasil dipindai</span>
+            </div>
+            <button type="button" class="switch" id="soundToggle" role="switch" aria-checked="true" aria-label="Suara beep">
+              <span class="switch-thumb"></span>
+            </button>
+          </div>
+
+          <div class="settings-item">
+            <div class="settings-item-text">
+              <span class="settings-item-label">Getaran</span>
+              <span class="settings-item-desc">Vibrasi saat kode berhasil dipindai</span>
+            </div>
+            <button type="button" class="switch" id="vibrationToggle" role="switch" aria-checked="true" aria-label="Getaran">
+              <span class="switch-thumb"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <span class="settings-group-label">Tema Tampilan</span>
+          <div class="theme-options" id="themeOptions">
+            <button type="button" class="theme-option" data-theme-value="dark" aria-pressed="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Gelap
+            </button>
+            <button type="button" class="theme-option" data-theme-value="light" aria-pressed="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              Terang
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <span class="settings-group-label">Data</span>
+          <button type="button" class="settings-danger-btn" id="clearAllDataBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+            Hapus Semua Riwayat &amp; Reset Pengaturan
+          </button>
+        </div>
+
+        <div class="about-box">
+          <p class="about-title">ScanLux</p>
+          <p class="about-text">QR Code &amp; Barcode Scanner berbasis browser. Semua proses pemindaian dan riwayat tersimpan lokal di perangkat Anda — tidak ada data yang dikirim ke server.</p>
+          <p class="about-version">Versi 1.0.0</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== BOTTOM NAV ===================== -->
+  <nav class="bottom-nav" aria-label="Navigasi utama">
+    <button type="button" class="nav-btn active" data-page="scanner" aria-label="Scanner">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3M4 16v3a1 1 0 0 0 1 1h3M20 8V5a1 1 0 0 0-1-1h-3M20 16v3a1 1 0 0 1-1 1h-3"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
+      <span>Scanner</span>
+    </button>
+    <button type="button" class="nav-btn" data-page="history" aria-label="Riwayat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 13.5"/></svg>
+      <span>Riwayat</span>
+    </button>
+    <button type="button" class="nav-btn" data-page="settings" aria-label="Pengaturan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><circle cx="4" cy="12" r="2"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><circle cx="12" cy="10" r="2"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><circle cx="20" cy="14" r="2"/></svg>
+      <span>Pengaturan</span>
+    </button>
+  </nav>
+
+  <!-- ===================== RESULT BOTTOM SHEET ===================== -->
+  <div class="sheet-overlay" id="sheetOverlay" hidden>
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="resultFormat">
+      <span class="sheet-handle" aria-hidden="true"></span>
+
+      <div class="sheet-header">
+        <span class="sheet-success-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <div>
+          <span class="sheet-format-badge" id="resultFormat">QR Code</span>
+          <span class="sheet-time" id="resultTime">--:--</span>
+        </div>
+      </div>
+
+      <div class="sheet-value-box">
+        <p class="sheet-value" id="resultValue"></p>
+      </div>
+
+      <div class="sheet-actions">
+        <button type="button" class="btn btn-secondary" id="copyBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Salin
+        </button>
+        <button type="button" class="btn btn-secondary" id="openLinkBtn" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Buka Tautan
+        </button>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-block" id="closeSheetBtn">Pindai Lagi</button>
+    </div>
+  </div>
+
+  <!-- ===================== TOAST ===================== -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+</div>
+
+<script src="https://unpkg.com/@zxing/library@0.20.0/umd/index.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

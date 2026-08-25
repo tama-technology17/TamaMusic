@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Tama Projects</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <meta name="theme-color" content="#08080a">
+  <title>Tama Project Hub</title>
+
+  <meta
+    name="theme-color"
+    content="#08080a"
+  >
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     :root {
@@ -22,93 +30,70 @@
       --card: rgba(255,255,255,.055);
       --border: rgba(255,255,255,.09);
       --text: #fff;
-      --muted: #92929b;
+      --muted: #85858e;
     }
 
     body {
       min-height: 100vh;
-      font-family: "Inter", sans-serif;
+
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        sans-serif;
+
       color: var(--text);
+
       background:
         radial-gradient(
           circle at 50% -10%,
-          rgba(120, 90, 255, .20),
+          rgba(120,90,255,.18),
           transparent 35%
         ),
         var(--bg);
-      overflow-x: hidden;
-    }
-
-    /* Ambient background */
-    body::before {
-      content: "";
- 0     position: fixed;
-0      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(
-          circle at 10% 30%,
-          rgba(0, 180, 255, .05),
-          transparent 25%
-        ),
-        radial-gradient(
-          circle at 90% 70%,
-          rgba(255, 0, 150, .04),
-          transparent 25%
-        );
-      z-index: -1;
     }
 
     .container {
-      width: min(1100px, 100%);
+      width: min(1050px, 100%);
       margin: auto;
-      padding: 35px 20px 50px;
+      padding: 35px 18px 50px;
     }
 
-    /* Header */
     header {
       text-align: center;
-      margin-bottom: 45px;
-      animation: fadeUp .7s ease both;
+      margin-bottom: 35px;
     }
 
     .logo {
       width: 58px;
       height: 58px;
-      margin: 0 auto 20px;
+
+      margin: auto;
+      margin-bottom: 20px;
 
       display: grid;
       place-items: center;
 
       border-radius: 18px;
 
-      background:
-        linear-gradient(
-          135deg,
-          #ffffff,
-          #9b9b9b
-        );
-
-      color: #08080a;
+      background: white;
+      color: black;
 
       font-size: 24px;
       font-weight: 800;
-
-      box-shadow:
-        0 15px 50px rgba(255,255,255,.12);
     }
 
     h1 {
-      font-size: clamp(32px, 7vw, 58px);
+      font-size: clamp(32px, 8vw, 55px);
       letter-spacing: -2px;
-      line-height: 1;
-      margin-bottom: 14px;
     }
 
     .subtitle {
+      margin-top: 12px;
+
       color: var(--muted);
+
       font-size: 14px;
-      line-height: 1.7;
     }
 
     .status {
@@ -116,90 +101,85 @@
       align-items: center;
       gap: 8px;
 
-      margin-top: 20px;
+      margin-top: 18px;
       padding: 8px 13px;
 
       border: 1px solid var(--border);
-      border-radius: 100px;
+      border-radius: 50px;
 
-      background: rgba(255,255,255,.035);
+      background: rgba(255,255,255,.03);
 
-      color: #aaa;
+      color: #999;
       font-size: 12px;
     }
 
-    .status-dot {
+    .dot {
       width: 7px;
       height: 7px;
-      border-radius: 50%;
-      background: #48e88b;
-      box-shadow: 0 0 12px #48e88b;
-    }
 
-    /* Search */
-    .search-wrapper {
-      max-width: 600px;
-      margin: 0 auto 30px;
-      animation: fadeUp .7s .1s ease both;
+      border-radius: 50%;
+
+      background: #43e88a;
+
+      box-shadow:
+        0 0 12px #43e88a;
     }
 
     .search {
+      position: relative;
+
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .search input {
       width: 100%;
       height: 52px;
 
-      border: 1px solid var(--border);
+      padding: 0 18px 0 45px;
+
+      border:
+        1px solid var(--border);
+
       border-radius: 16px;
 
       outline: none;
 
-      padding: 0 18px 0 48px;
-
       color: white;
-      background: rgba(255,255,255,.045);
+
+      background:
+        rgba(255,255,255,.045);
 
       font-size: 14px;
-
-      transition: .25s;
     }
 
-    .search:focus {
-      border-color: rgba(255,255,255,.25);
-      background: rgba(255,255,255,.065);
-      box-shadow: 0 0 30px rgba(255,255,255,.04);
-    }
-
-    .search-box {
-      position: relative;
-    }
-
-    .search-icon {
+    .search span {
       position: absolute;
+
       left: 17px;
       top: 50%;
+
       transform: translateY(-50%);
 
       color: #777;
+
       font-size: 18px;
     }
 
-    /* Projects */
-    .section-title {
+    .section {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
 
-      margin-bottom: 16px;
-
-      animation: fadeUp .7s .15s ease both;
+      margin: 28px 0 15px;
     }
 
-    .section-title h2 {
+    .section h2 {
       font-size: 15px;
-      font-weight: 600;
     }
 
-    .count {
-      color: #777;
+    #count {
+      color: #666;
       font-size: 12px;
     }
 
@@ -210,21 +190,21 @@
     }
 
     .project {
-      position: relative;
-
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 14px;
 
-      padding: 17px;
+      min-height: 88px;
 
-      min-height: 92px;
+      padding: 15px;
 
-      text-decoration: none;
       color: white;
+      text-decoration: none;
 
-      border: 1px solid var(--border);
-      border-radius: 20px;
+      border:
+        1px solid var(--border);
+
+      border-radius: 19px;
 
       background:
         linear-gradient(
@@ -233,83 +213,43 @@
           rgba(255,255,255,.025)
         );
 
-      overflow: hidden;
-
-      transition:
-        transform .25s ease,
-        border-color .25s ease,
-        background .25s ease,
-        box-shadow .25s ease;
-
-      animation: fadeUp .6s ease both;
-    }
-
-    .project::before {
-      content: "";
-
-      position: absolute;
-      inset: 0;
-
-      background:
-        radial-gradient(
-          circle at 0% 0%,
-          rgba(255,255,255,.09),
-          transparent 35%
-        );
-
-      opacity: 0;
-      transition: .3s;
+      transition: .25s;
     }
 
     .project:hover {
       transform: translateY(-4px);
 
-      border-color: rgba(255,255,255,.2);
+      border-color:
+        rgba(255,255,255,.2);
 
       background:
-        linear-gradient(
-          145deg,
-          rgba(255,255,255,.09),
-          rgba(255,255,255,.04)
-        );
+        rgba(255,255,255,.08);
 
       box-shadow:
         0 15px 40px rgba(0,0,0,.35);
     }
 
-    .project:hover::before {
-      opacity: 1;
-    }
-
-    .project:active {
-      transform: scale(.98);
-    }
-
     .number {
-      position: relative;
-      z-index: 1;
-
-      min-width: 45px;
+      width: 45px;
       height: 45px;
+
+      flex-shrink: 0;
 
       display: grid;
       place-items: center;
 
       border-radius: 14px;
 
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.07);
+      background:
+        rgba(255,255,255,.07);
 
       color: #aaa;
 
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
     }
 
     .info {
-      position: relative;
-      z-index: 1;
-
       min-width: 0;
       flex: 1;
     }
@@ -321,19 +261,18 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-
-      margin-bottom: 6px;
     }
 
     .path {
-      color: #686870;
-      font-size: 11px;
+      margin-top: 6px;
+
+      color: #66666e;
+
+      font-family: monospace;
+      font-size: 10px;
     }
 
     .arrow {
-      position: relative;
-      z-index: 1;
-
       color: #666;
       font-size: 20px;
 
@@ -345,67 +284,49 @@
       transform: translateX(4px);
     }
 
-    /* Empty */
-    .empty {
-      display: none;
-      text-align: center;
+    .loading,
+    .empty,
+    .error {
       padding: 50px 20px;
+
+      text-align: center;
+
       color: #666;
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    /* Footer */
+    .error {
+      color: #b56b6b;
+    }
+
     footer {
+      margin-top: 45px;
+
       text-align: center;
-      margin-top: 50px;
-      color: #4e4e55;
+
+      color: #444;
+
       font-size: 11px;
     }
 
-    /* Animation */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Mobile */
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
 
       .container {
-        padding: 28px 15px 40px;
-      }
-
-      header {
-        margin-bottom: 32px;
-      }
-
-      h1 {
-        letter-spacing: -1.5px;
+        padding: 28px 14px;
       }
 
       .projects {
         grid-template-columns: 1fr;
       }
 
-      .project {
-        min-height: 84px;
+      h1 {
+        letter-spacing: -1.5px;
       }
+
     }
 
-    /* Desktop */
-    @media (min-width: 900px) {
-      .projects {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
   </style>
+
 </head>
 
 <body>
@@ -418,49 +339,44 @@
         T
       </div>
 
-      <h1>My Projects</h1>
+      <h1>
+        Project Hub
+      </h1>
 
       <p class="subtitle">
-        Koleksi project dan eksperimen web yang tersedia
-        di server lokal ini.
+        Semua project kamu dalam satu tempat.
       </p>
 
       <div class="status">
-        <span class="status-dot"></span>
-        Local Server Online
+        <span class="dot"></span>
+        Server Online
       </div>
 
     </header>
 
 
-    <div class="search-wrapper">
+    <div class="search">
 
-      <div class="search-box">
+      <span>⌕</span>
 
-        <span class="search-icon">⌕</span>
-
-        <input
-          id="search"
-          class="search"
-          type="search"
-          placeholder="Cari project..."
-          autocomplete="off"
-        >
-
-      </div>
+      <input
+        id="search"
+        type="search"
+        placeholder="Cari project..."
+        autocomplete="off"
+      >
 
     </div>
 
 
-    <div class="section-title">
+    <div class="section">
 
-      <h2>Projects</h2>
+      <h2>
+        Projects
+      </h2>
 
-      <span
-        id="count"
-        class="count"
-      >
-        9 projects
+      <span id="count">
+        Loading...
       </span>
 
     </div>
@@ -471,267 +387,175 @@
       class="projects"
     >
 
-      <a
-        class="project"
-        href="./astagabercanda/"
-        data-name="astagabercanda"
-      >
-        <div class="number">01</div>
-
-        <div class="info">
-          <div class="name">
-            Astaga Bercanda
-          </div>
-
-          <div class="path">
-            /astagabercanda/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-
-      <a
-        class="project"
-        href="./dropdead/"
-        data-name="dropdead"
-      >
-        <div class="number">02</div>
-
-        <div class="info">
-          <div class="name">
-            Drop Dead
-          </div>
-
-          <div class="path">
-            /dropdead/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-
-      <a
-        class="project"
-        href="./lovemenot/"
-        data-name="lovemenot"
-      >
-        <div class="number">03</div>
-
-        <div class="info">
-          <div class="name">
-            Love Me Not
-          </div>
-
-          <div class="path">
-            /lovemenot/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-
-      <a
-        class="project"
-        href="./onemorenight/"
-        data-name="onemorenight"
-      >
-        <div class="number">04</div>
-
-        <div class="info">
-          <div class="name">
-            One More Night
-          </div>
-
-          <div class="path">
-            /onemorenight/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-
-      <a
-        class="project"
-        href="./sesipotret/"
-        data-name="sesipotret"
-      >
-        <div class="number">05</div>
-
-        <div class="info">
-          <div class="name">
-            Sesi Potret
-          </div>
-
-          <div class="path">
-            /sesipotret/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-
-      <a
-        class="project"
-        href="./shapeofmyheart/"
-        data-name="shapeofmyheart"
-      >
-        <div class="number">06</div>
-
-        <div class="info">
-          <div class="name">
-            Shape of My Heart
-          </div>
-
-          <div class="path">
-            /shapeofmyheart/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-
-      <a
-        class="project"
-        href="./thefateofophelia/"
-        data-name="thefateofophelia"
-      >
-        <div class="number">07</div>
-
-        <div class="info">
-          <div class="name">
-            The Fate of Ophelia
-          </div>
-
-          <div class="path">
-            /thefateofophelia/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-     <a
-       class="project"
-       href="./tehhijau/"
-       data-name="tehhijau"
-     >
-        <div class="number">08</div>
-
-        <div class="info">
-          <div class="name">
-            Teh Hijau
-          </div>
-
-          <div class="path">
-            /tehhijau/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-     <a
-       class="project"
-       href="./theonethatgotaway/"
-       data-name="theonethatgotaway"
-     >
-        <div class="number">09</div>
-
-        <div class="info">
-          <div class="name">
-            The One That Got Away
-          </div>
-
-          <div class="path">
-            /theonethatgotaway/
-          </div>
-        </div>
-
-        <div class="arrow">
-          →
-        </div>
-      </a>
-
-
+      <div class="loading">
+        Memuat project...
+      </div>
 
     </section>
 
 
-    <div
-      id="empty"
-      class="empty"
-    >
-      Project tidak ditemukan.
-    </div>
-
-
     <footer>
-      Tama Technology · Local Project Hub
+      Tama Technology · Project Hub
     </footer>
 
   </main>
 
 
   <script>
-    const search = document.getElementById("search");
-    const projects = [...document.querySelectorAll(".project")];
-    const count = document.getElementById("count");
-    const empty = document.getElementById("empty");
 
-    search.addEventListener("input", () => {
+    const projectContainer =
+      document.getElementById("projects");
 
-      const keyword = search.value
-        .toLowerCase()
-        .trim();
+    const search =
+      document.getElementById("search");
 
-      let visible = 0;
+    const count =
+      document.getElementById("count");
 
-      projects.forEach(project => {
 
-        const name =
-          project.dataset.name.toLowerCase();
+    let projects = [];
 
-        const show =
-          name.includes(keyword);
 
-        project.style.display =
-          show ? "flex" : "none";
+    async function loadProjects() {
 
-        if (show) visible++;
+      try {
 
-      });
+        const response =
+          await fetch("/api/projects");
+
+        if (!response.ok) {
+          throw new Error(
+            "API error"
+          );
+        }
+
+        const data =
+          await response.json();
+
+        projects =
+          data.projects || [];
+
+        render(projects);
+
+      } catch (error) {
+
+        console.error(error);
+
+        projectContainer.innerHTML = `
+          <div class="error">
+            Gagal mengambil daftar project.
+            <br><br>
+            Pastikan server.py sedang berjalan.
+          </div>
+        `;
+
+        count.textContent =
+          "Error";
+      }
+
+    }
+
+
+    function render(list) {
 
       count.textContent =
-        `${visible} project${visible !== 1 ? "s" : ""}`;
+        `${list.length} project` +
+        (list.length !== 1 ? "s" : "");
 
-      empty.style.display =
-        visible === 0 ? "block" : "none";
 
-    });
+      if (!list.length) {
+
+        projectContainer.innerHTML = `
+          <div class="empty">
+            Belum ada project.
+          </div>
+        `;
+
+        return;
+      }
+
+
+      projectContainer.innerHTML =
+        list.map((project, index) => {
+
+          const number =
+            String(index + 1)
+              .padStart(2, "0");
+
+          return `
+
+            <a
+              class="project"
+              href="${project.url}"
+            >
+
+              <div class="number">
+                ${number}
+              </div>
+
+              <div class="info">
+
+                <div class="name">
+                  ${escapeHTML(project.title)}
+                </div>
+
+                <div class="path">
+                  ${escapeHTML(project.path)}
+                </div>
+
+              </div>
+
+              <div class="arrow">
+                →
+              </div>
+
+            </a>
+
+          `;
+
+        }).join("");
+
+    }
+
+
+    search.addEventListener(
+      "input",
+      () => {
+
+        const keyword =
+          search.value
+            .toLowerCase()
+            .trim();
+
+        const filtered =
+          projects.filter(project =>
+            project.name
+              .toLowerCase()
+              .includes(keyword)
+          );
+
+        render(filtered);
+
+      }
+    );
+
+
+    function escapeHTML(value) {
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    loadProjects();
+
   </script>
 
 </body>
+
 </html>
